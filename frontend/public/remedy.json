@@ -1,0 +1,471 @@
+[
+  {
+    "id": 1,
+    "name": "Ajwain Water",
+    "disease": "Indigestion, Gas, Bloating",
+    "description": "A digestive aid to relieve gas, indigestion, and stomach pain.",
+    "ingredients": ["1 teaspoon ajwain (carom seeds)", "1 cup water"],
+    "preparationMethod": [
+      "Boil 1 cup of water.",
+      "Add ajwain seeds.",
+      "Simmer for 5 minutes.",
+      "Strain and serve warm."
+    ],
+    "dosage": "1 cup after meals.",
+    "benefits": "Improves digestion, relieves gas, reduces bloating.",
+    "precautions": "Avoid excessive use during pregnancy.",
+    "image_url": "https://media.istockphoto.com/id/1334109693/photo/close-up-of-original-organic-boiled-water-with-ajwain-in-a-transparent-glass-cup-over-white.jpg?s=612x612&w=0&k=20&c=NFYbf23TpPgGD8t6Gtm4xxFfF5RLJNAmZ6kGhtdgVI0="
+  },
+  {
+    "id": 2,
+    "name": "Turmeric Milk",
+    "disease": "Cold, Cough, Inflammation",
+    "description": "A natural anti-inflammatory and immunity booster.",
+    "ingredients": ["1 cup milk", "1/2 teaspoon turmeric powder"],
+    "preparationMethod": [
+      "Heat the milk.",
+      "Add turmeric and stir well.",
+      "Simmer for 2 minutes.",
+      "Serve warm."
+    ],
+    "dosage": "Once before bed.",
+    "benefits": "Boosts immunity, reduces inflammation, aids sleep.",
+    "precautions": "Avoid in case of turmeric allergy.",
+    "image_url": "https://media.istockphoto.com/id/1149544865/photo/hot-healthy-drink-turmeric-latte-golden-milk-with-turmeric-root-ginger-powder-black-pepper.jpg?s=612x612&w=0&k=20&c=GUj6INIL-1CqCJbuxVpQWxFaNqHrIthVZqmwmNhwHRI="
+  },
+  {
+    "id": 3,
+    "name": "Ginger Tea",
+    "disease": "Cold, Nausea, Headache",
+    "description": "A warming tea that helps relieve cold symptoms and nausea.",
+    "ingredients": ["1-inch ginger root", "1.5 cups water", "Honey (optional)"],
+    "preparationMethod": [
+      "Boil water with sliced ginger.",
+      "Simmer for 10 minutes.",
+      "Strain and add honey if desired."
+    ],
+    "dosage": "1-2 cups per day.",
+    "benefits": "Reduces nausea, eases congestion, anti-inflammatory.",
+    "precautions": "May interfere with blood thinners.",
+    "image_url": "https://media.istockphoto.com/id/1495761249/photo/fresh-ginger-and-ginger-tea.jpg?s=612x612&w=0&k=20&c=DWGF1sFWCoXR5l-fNpJ7nBJxKVpMVgJ9uWZfIwij-VE="
+  },
+  {
+    "id": 4,
+    "name": "Tulsi Leaves",
+    "disease": "Fever, Cough, Stress",
+    "description": "Holy basil known for its immune-boosting and stress-relieving properties.",
+    "ingredients": ["5-6 fresh tulsi leaves", "1 cup water"],
+    "preparationMethod": [
+      "Boil tulsi leaves in water for 5 minutes.",
+      "Strain and drink warm."
+    ],
+    "dosage": "Twice daily.",
+    "benefits": "Fights infection, reduces stress, purifies blood.",
+    "precautions": "Consult before use during pregnancy.",
+    "image_url": "https://media.istockphoto.com/id/1245095474/photo/holy-basil-or-tulsi-leaves.jpg?s=612x612&w=0&k=20&c=o74kw4VaU7ZuZha3zhIearbRYGz8q6QQnIw5M81APg8="
+  },
+  {
+    "id": 5,
+    "name": "Cinnamon Water",
+    "disease": "Diabetes, Cholesterol",
+    "description": "Helps regulate blood sugar and improve heart health.",
+    "ingredients": ["1 stick cinnamon", "1 cup water"],
+    "preparationMethod": [
+      "Boil cinnamon in water for 10 minutes.",
+      "Strain and drink warm."
+    ],
+    "dosage": "Once daily on empty stomach.",
+    "benefits": "Lowers blood sugar, reduces cholesterol, anti-inflammatory.",
+    "precautions": "Limit to one stick daily.",
+    "image_url": "https://media.istockphoto.com/id/1305287626/photo/glass-cup-of-hot-tea-with-aromatic-cinnamon-on-wooden-table-space-for-text.jpg?s=612x612&w=0&k=20&c=tSvn4kMinbqY4XmMFVbw4nY60qXYaiZfgbOOZD0JVRI="
+  },
+  {
+    "id": 6,
+    "name": "Amla Juice",
+    "disease": "Hair Fall, Weak Immunity",
+    "description": "Rich in Vitamin C, boosts immunity and strengthens hair.",
+    "ingredients": ["2 teaspoons amla juice", "1/2 cup water"],
+    "preparationMethod": [
+      "Mix amla juice with water.",
+      "Consume on empty stomach."
+    ],
+    "dosage": "Once daily in morning.",
+    "benefits": "Improves digestion, skin health, and immunity.",
+    "precautions": "May cause acidity in excess.",
+    "image_url": "https://media.istockphoto.com/id/1483965624/photo/tasty-gooseberry-juice-and-fresh-berries-on-wooden-table-space-for-text.jpg?s=612x612&w=0&k=20&c=MGxUc-IZJsAvpktwWYNeYjKszD0_FYByWvuobmjlFWE="
+  },
+  {
+    "id": 7,
+    "name": "Jeera Water",
+    "disease": "Acidity, Bloating",
+    "description": "Cumin water improves digestion and detoxifies the body.",
+    "ingredients": ["1 teaspoon cumin seeds", "1 cup water"],
+    "preparationMethod": [
+      "Boil water with cumin seeds for 5 minutes.",
+      "Strain and drink warm."
+    ],
+    "dosage": "Before breakfast.",
+    "benefits": "Aids digestion, flushes toxins, relieves gas.",
+    "precautions": "Avoid overuse in low blood sugar patients.",
+    "image_url": "https://media.istockphoto.com/id/1150386296/photo/herbal-detoxifying-drink-isolated-on-white-i-e-jeera-water-with-some-raw-organic-cumin-in-a.jpg?s=612x612&w=0&k=20&c=TMvRd-EB9xgXvRqf4Zfq-VwkWh5yGPcFuiC7ADOHmT0="
+  },
+  {
+    "id": 8,
+    "name": "Neem Leaves",
+    "disease": "Skin Infection, Acne, Dandruff",
+    "description": "Neem purifies blood and is effective in treating skin problems.",
+    "ingredients": ["5-6 neem leaves", "1 cup water"],
+    "preparationMethod": [
+      "Boil neem leaves in water for 10 minutes.",
+      "Strain and consume or use as a skin rinse."
+    ],
+    "dosage": "Once every morning.",
+    "benefits": "Cleanses blood, treats acne, boosts immunity.",
+    "precautions": "Avoid during pregnancy.",
+    "image_url": "https://media.istockphoto.com/id/601911480/photo/medicinal-neem.jpg?s=612x612&w=0&k=20&c=VK57zSyBmHs6_xqMhfLZNK7xG4HpZoapQM1WNTsdMwA="
+  },
+  {
+    "id": 9,
+    "name": "Flaxseed Drink",
+    "disease": "Constipation, Heart Health",
+    "description": "A fiber-rich drink that supports digestion and helps lower cholesterol.",
+    "ingredients": ["1 tablespoon flaxseeds", "1.5 cups water", "Lemon juice (optional)"],
+    "preparationMethod": [
+      "1. Boil flaxseeds in water for 5–7 minutes until it thickens.",
+      "2. Strain into a cup.",
+      "3. Add lemon juice if desired and stir well."
+    ],
+    "dosage": "Once daily, preferably in the morning.",
+    "benefits": "Improves bowel movements, rich in omega-3, supports heart health.",
+    "precautions": "Avoid in cases of bowel obstruction or during pregnancy without medical advice.",
+    "image_url": "https://media.istockphoto.com/id/1354239159/photo/healthy-oatmeal-smoothi-e-with-fruits-and-seeds.jpg?s=612x612&w=0&k=20&c=fldCgHCEUylfEXqB9sH2g8JFSr4uTCqZbUnZf0inNys="
+  },
+  {
+    "id": 10,
+    "name": "Fenugreek Tea",
+    "disease": "High blood sugar, digestion issues",
+    "description": "An herbal tea made from fenugreek seeds to support blood sugar levels.",
+    "ingredients": ["1 teaspoon fenugreek seeds", "1 cup water"],
+    "preparationMethod": [
+      "1. Soak fenugreek seeds overnight.",
+      "2. Boil the soaked seeds in 1 cup of water.",
+      "3. Strain and drink warm."
+    ],
+    "dosage": "1 cup on an empty stomach in the morning.",
+    "benefits": "Helps manage blood sugar, aids digestion.",
+    "precautions": "May lower blood sugar significantly. Monitor closely if diabetic.",
+    "image_url": "https://media.istockphoto.com/id/1127633174/photo/egyptian-yellow-tea-or-methi-dana-drink-and-fenugreek-seeds-on-wooden-table.jpg?s=612x612&w=0&k=20&c=ktEYUgbxRmu651U_-N1o896fKWWfDyFSuVkg9KPhwOU="
+  },
+  {
+    "id": 11,
+    "name": "Mint Juice",
+    "disease": "Irritable bowel syndrome (IBS), nausea",
+    "description": "A cooling remedy for digestion and bowel comfort.",
+    "ingredients": ["1/2 cup mint leaves", "1 glass water", "A pinch of black salt"],
+    "preparationMethod": [
+      "1. Blend mint leaves with water.",
+      "2. Strain and add black salt.",
+      "3. Serve chilled."
+    ],
+    "dosage": "1 glass after lunch.",
+    "benefits": "Soothes digestion, relieves nausea, helps IBS symptoms.",
+    "precautions": "Avoid if you have acid reflux or GERD.",
+    "image_url": "https://media.istockphoto.com/id/1152441440/photo/green-detox-juice-with-ginger-and-mint-in-glasses-and-jars.jpg?s=612x612&w=0&k=20&c=wsScPdrSynDgNRwJU_2PoHWLtEznQXIG_oKwe8y7z-Q="
+  },
+  {
+    "id": 12,
+    "name": "Onion Juice for Hair",
+    "disease": "Hair fall, dandruff",
+    "description": "Onion juice stimulates hair growth and reduces scalp infections.",
+    "ingredients": ["1 medium onion"],
+    "preparationMethod": [
+      "1. Peel and grate the onion.",
+      "2. Extract juice using a muslin cloth.",
+      "3. Apply to scalp and leave for 30 minutes.",
+      "4. Wash with mild shampoo."
+    ],
+    "dosage": "Use twice a week.",
+    "benefits": "Reduces hair fall, nourishes scalp, promotes hair regrowth.",
+    "precautions": "Avoid contact with eyes. Do a patch test before full use.",
+    "image_url": "https://media.istockphoto.com/id/1171753561/photo/best-earth-growth-boosting-potion-consisting-of-ingredients-which-are-potato-juice-and-onion.jpg?s=612x612&w=0&k=20&c=yMMGWMHDlIoNcLx7MKoGJ56fxqL3EAVdF_Aws2Fjr1I="
+  },
+  {
+    "id": 13,
+    "name": "Coriander Seed Water",
+    "disease": "Acidity, Bloating, Poor Digestion",
+    "description": "A soothing herbal drink made from coriander seeds to improve digestion and reduce acidity.",
+    "ingredients": ["1 tablespoon coriander seeds", "1.5 cups water"],
+    "preparationMethod": [
+      "1. Soak coriander seeds overnight in water.",
+      "2. Boil the soaked seeds in the same water for 10 minutes.",
+      "3. Strain and drink warm or at room temperature."
+    ],
+    "dosage": "1 cup on an empty stomach in the morning.",
+    "benefits": "Relieves acidity, improves appetite, detoxifies the body.",
+    "precautions": "Use in moderation if you have low blood pressure.",
+    "image_url": "https://media.istockphoto.com/id/1210040593/photo/charred-lemon-rosemary-and-coriander-gin-and-tonic-is-a-flavors-are-perfectly-balanced.jpg?s=612x612&w=0&k=20&c=SsxJQv8_zskVNQy66wqCjrIfqHab-sV8jzAP5vE_yEg="
+  },
+  {
+    "id": 14,
+    "name": "Triphala Powder Drink",
+    "disease": "Constipation, digestive issues",
+    "description": "Triphala is an Ayurvedic formulation to promote healthy digestion.",
+    "ingredients": ["1/2 teaspoon triphala powder", "1 cup warm water"],
+    "preparationMethod": [
+      "1. Mix triphala powder in warm water.",
+      "2. Stir and drink on an empty stomach."
+    ],
+    "dosage": "Once daily in the morning.",
+    "benefits": "Improves digestion, relieves constipation, detoxifies body.",
+    "precautions": "Do not use during pregnancy.",
+    "image_url": "https://media.istockphoto.com/id/1155985049/photo/home-remedy-to-reduce-headache-or-to-treat-headache-isolated-on-white-i-e-hing-or-devils-dung.jpg?s=612x612&w=0&k=20&c=pYtXsZhVyMabhEz5SocCXv5D2OkqlXRlBC-JcYyly7A="
+  },
+  {
+    "id": 15,
+    "name": "Barley Water",
+    "disease": "Urinary Tract Infection (UTI), Kidney Health, Dehydration",
+    "description": "A cooling and hydrating drink traditionally used to cleanse the urinary system and support kidney function.",
+    "ingredients": ["1/4 cup pearl barley", "4 cups water", "Lemon juice or honey (optional)"],
+    "preparationMethod": [
+      "1. Wash barley thoroughly.",
+      "2. Boil with 4 cups of water for 30–40 minutes.",
+      "3. Strain and let it cool.",
+      "4. Add lemon juice or honey if desired."
+    ],
+    "dosage": "1–2 glasses per day.",
+    "benefits": "Flushes toxins, supports kidney health, cools the body.",
+    "precautions": "Consume in moderation if you have gluten sensitivity or low blood pressure.",
+    "image_url": "https://media.istockphoto.com/id/1024633584/photo/barley-water-in-glass-with-raw-and-cooked-pearl-barley-wheat-seeds-selective-focus.jpg?s=612x612&w=0&k=20&c=JkGZUBY9TvsL61bE0OFjquoAuJM1WkWOwafnUzYZDk4="
+  },
+  {
+    "id": 16,
+    "name": "Garlic Clove",
+    "disease": "High cholesterol, high blood pressure",
+    "description": "A simple and powerful heart health booster.",
+    "ingredients": ["1 raw garlic clove"],
+    "preparationMethod": [
+      "1. Peel and crush a garlic clove.",
+      "2. Consume raw on an empty stomach."
+    ],
+    "dosage": "1 clove daily.",
+    "benefits": "Lowers blood pressure and cholesterol levels.",
+    "precautions": "May irritate stomach lining if taken excessively.",
+    "image_url": "https://media.istockphoto.com/id/1026544946/photo/garlic.jpg?s=612x612&w=0&k=20&c=hM-0OcdSe8wPeMxz2AdnkkHuXY9WdQreLCS2qjaHGC0="
+  },
+  {
+    "id": 17,
+    "name": "Holy Basil (Tulsi) Tea",
+    "disease": "Stress, respiratory issues",
+    "description": "A sacred herb tea to calm the mind and support the lungs.",
+    "ingredients": ["1 tablespoon dried tulsi leaves", "1 cup water"],
+    "preparationMethod": [
+      "1. Boil tulsi leaves in water for 5 minutes.",
+      "2. Strain and serve warm."
+    ],
+    "dosage": "1–2 cups daily.",
+    "benefits": "Reduces stress, clears respiratory tract, enhances immunity.",
+    "precautions": "Avoid during pregnancy without doctor’s advice.",
+    "image_url": "https://media.istockphoto.com/id/1645828793/photo/herbal-tea.jpg?s=612x612&w=0&k=20&c=AHhiPJDgNkBd4cw6BRwM8qKzt7NC3HfkgUfhn5oYvJA="
+  },
+  {
+    "id": 18,
+    "name": "Licorice Root Tea",
+    "disease": "Cough, sore throat",
+    "description": "A sweet-tasting root tea for respiratory relief.",
+    "ingredients": ["1 teaspoon licorice root", "1 cup water"],
+    "preparationMethod": [
+      "1. Boil water and add licorice root.",
+      "2. Simmer for 10 minutes.",
+      "3. Strain and drink warm."
+    ],
+    "dosage": "1 cup twice daily during cough.",
+    "benefits": "Soothes throat, reduces inflammation, clears mucus.",
+    "precautions": "Not for long-term use; avoid if you have high blood pressure.",
+    "image_url": "https://media.istockphoto.com/id/589447170/photo/herbal-tea-with-star-anise-and-licorice-on-wooden.jpg?s=612x612&w=0&k=20&c=hDnCPjG-qgtoKmrQqpSGHpPNgGfut1MXboDcgOlj91Y="
+  },
+  {
+    "id": 19,
+    "name": "Black Raisin Water",
+    "disease": "Anemia, Liver Detox, Hormonal Imbalance",
+    "description": "A powerful detox and iron-rich drink made by soaking black raisins overnight.",
+    "ingredients": ["8-10 black raisins", "1 cup water"],
+    "preparationMethod": [
+      "1. Soak black raisins in water overnight.",
+      "2. In the morning, strain the water and drink on an empty stomach.",
+      "3. Eat the soaked raisins separately if desired."
+    ],
+    "dosage": "Once daily in the morning.",
+    "benefits": "Boosts iron levels, supports liver health, balances hormones.",
+    "precautions": "Use in moderation if diabetic due to natural sugar content.",
+    "image_url": "https://cf-img-a-in.tosshub.com/sites/visualstory/wp/2025/05/istockphoto-1937959714-612x612ITG-1747633147964.jpg?size=*:900"
+  },
+  {
+    "id": 20,
+    "name": "Coriander Tea",
+    "disease": "Acidity, Indigestion",
+    "description": "A soothing tea that helps reduce acidity and bloating.",
+    "ingredients": ["1 teaspoon coriander seeds", "1 cup water"],
+    "preparationMethod": [
+      "1. Boil coriander seeds in water for 5–7 minutes.",
+      "2. Strain and serve warm."
+    ],
+    "dosage": "1 cup after meals.",
+    "benefits": "Relieves heartburn, aids digestion.",
+    "precautions": "Not recommended in large doses during pregnancy.",
+    "image_url": "https://media.istockphoto.com/id/1336601313/photo/top-view-of-indian-herbal-masala-chai-or-traditional-beverage-tea-with-milk-and-spices-kerala.jpg?s=612x612&w=0&k=20&c=txjXqXtu3_PcA0ztNxyNVXJ-YziORr2XnuHWIriNEKk="
+  },
+  {
+    "id": 21,
+    "name": "Peppermint Tea",
+    "disease": "Nausea, Digestive Disorders",
+    "description": "A calming tea known to relieve nausea and bloating.",
+    "ingredients": ["10 peppermint leaves or 1 tea bag", "1 cup water"],
+    "preparationMethod": [
+      "1. Steep peppermint leaves or tea bag in hot water for 5 minutes.",
+      "2. Strain and serve."
+    ],
+    "dosage": "1–2 cups per day.",
+    "benefits": "Eases stomach pain, reduces bloating.",
+    "precautions": "Avoid if suffering from acid reflux.",
+    "image_url": "https://media.istockphoto.com/id/647196742/photo/cups-of-tea-with-mint-on-wooden.jpg?s=612x612&w=0&k=20&c=X2U8DwbQV8YLlefR6bNFfCAQM9gsDoZYGS6RPsRmYIc="
+  },
+  {
+    "id": 22,
+    "name": "Ashwagandha Tonic",
+    "disease": "Anxiety, Fatigue",
+    "description": "An adaptogenic herb to combat stress and fatigue.",
+    "ingredients": ["1/2 teaspoon ashwagandha powder", "1 cup warm milk"],
+    "preparationMethod": [
+      "1. Mix ashwagandha powder into warm milk.",
+      "2. Stir well and drink before bed."
+    ],
+    "dosage": "Once daily at bedtime.",
+    "benefits": "Reduces stress, improves energy, boosts immunity.",
+    "precautions": "Consult doctor before use if on medication.",
+    "image_url": "https://media.istockphoto.com/id/1333961108/photo/ashwagandha-superfood-powder-root-and-drink.jpg?s=612x612&w=0&k=20&c=uCEGEEMuSjiwuX87YqyP3jcojl6AZ_A7CKNgY38KzNQ="
+  },
+  {
+    "id": 23,
+    "name": "Lemon Honey Water",
+    "disease": "Detox, Digestion",
+    "description": "A refreshing morning drink to boost metabolism and digestion.",
+    "ingredients": ["1 glass warm water", "1 teaspoon honey", "1 teaspoon lemon juice"],
+    "preparationMethod": [
+      "1. Mix lemon juice and honey into warm water.",
+      "2. Stir and drink immediately."
+    ],
+    "dosage": "Every morning on an empty stomach.",
+    "benefits": "Flushes toxins, aids digestion, boosts energy.",
+    "precautions": "Not for people with citrus allergies.",
+    "image_url": "https://media.istockphoto.com/id/831656026/photo/tea-with-ginger-lemon.jpg?s=612x612&w=0&k=20&c=ho1L2GDaq5reoTYgR3NImf85HbYC-bQ2KuDowjTejaQ="
+  },
+  {
+    "id": 24,
+    "name": "Brahmi Tea",
+    "disease": "Memory Loss, Anxiety",
+    "description": "Brahmi is an Ayurvedic herb known for cognitive support.",
+    "ingredients": ["1 teaspoon dried Brahmi leaves", "1 cup water"],
+    "preparationMethod": [
+      "1. Boil Brahmi leaves in water for 7 minutes.",
+      "2. Strain and drink warm."
+    ],
+    "dosage": "1 cup daily.",
+    "benefits": "Improves memory, reduces stress, enhances clarity.",
+    "precautions": "May cause drowsiness if consumed in excess.",
+    "image_url": "https://media.istockphoto.com/id/1265332463/photo/camellia-sinensis-cup-of-green-tea-with-dried-leaves.jpg?s=612x612&w=0&k=20&c=mbclFGLwHI1YYiZrMkkog1hKlYORjI3oGWlmAeuRvBs="
+  },
+  {
+    "id": 25,
+    "name": "Clove Infused Water",
+    "disease": "Toothache, Bad Breath",
+    "description": "Clove water helps in oral care and boosts digestive health.",
+    "ingredients": ["2–3 cloves", "1 cup water"],
+    "preparationMethod": [
+      "1. Boil cloves in water for 5 minutes.",
+      "2. Strain and cool slightly before drinking or using as mouth rinse."
+    ],
+    "dosage": "Once daily or as a rinse after brushing.",
+    "benefits": "Fights bacteria, freshens breath, reduces inflammation.",
+    "precautions": "Avoid overuse as it may cause mouth irritation.",
+    "image_url": "https://media.istockphoto.com/id/2190703443/photo/clove-infused-water-for-immunity-and-digestive-health-benefits.jpg?s=612x612&w=0&k=20&c=-Whd_lPriAnODZiemlrDTQltvJcC5MoLJk_a66sua-o="
+  },
+  {
+    "id": 26,
+    "name": "Carrot Juice",
+    "disease": "Poor Vision, Skin Problems",
+    "description": "Rich in beta-carotene, carrot juice supports eye and skin health.",
+    "ingredients": ["2 medium carrots", "1/2 cup water"],
+    "preparationMethod": [
+      "1. Blend carrots with water until smooth.",
+      "2. Strain or drink as is."
+    ],
+    "dosage": "1 glass daily in the morning.",
+    "benefits": "Improves eyesight, boosts skin glow, detoxifies liver.",
+    "precautions": "May cause orange skin tone in excessive amounts.",
+    "image_url": "https://media.istockphoto.com/id/1160546069/photo/orange-and-carrot-juice-on-rustic-wooden-table.jpg?s=612x612&w=0&k=20&c=uJ_viKatlVTcKDn3bEK4rI4zcM-ocyK82x_H5J3hKy8="
+  },
+  {
+    "id": 27,
+    "name": "Beetroot Juice",
+    "disease": "Anemia, High Blood Pressure",
+    "description": "Beetroot increases red blood cell production and lowers BP.",
+    "ingredients": ["1 beetroot", "1/2 cup water", "Lemon (optional)"],
+    "preparationMethod": [
+      "1. Peel and chop beetroot.",
+      "2. Blend with water and strain.",
+      "3. Add lemon for flavor if needed."
+    ],
+    "dosage": "1 glass every alternate day.",
+    "benefits": "Boosts hemoglobin, improves stamina, lowers blood pressure.",
+    "precautions": "May turn urine and stools red temporarily.",
+    "image_url": "https://media.istockphoto.com/id/508511603/photo/beetroot-juice.jpg?s=612x612&w=0&k=20&c=IBMN_yhQPCO3gY6gumNIXFVBx3Yoq8_1I8UXinEI_QI="
+  },
+  {
+    "id": 28,
+    "name": "Curry Leaves Juice",
+    "disease": "Hair fall, Anemia",
+    "description": "Curry leaves help in reducing hair fall and improving iron levels.",
+    "ingredients": ["10–15 curry leaves", "1/2 cup water", "Lemon juice (optional)"],
+    "preparationMethod": [
+      "1. Blend curry leaves with water.",
+      "2. Strain and add lemon juice if desired.",
+      "3. Drink fresh."
+    ],
+    "dosage": "2–3 times a week.",
+    "benefits": "Strengthens hair roots, rich in iron and antioxidants.",
+    "precautions": "May taste bitter; adjust with lemon or honey.",
+    "image_url": "https://perfectpotions.co/blog/wp-content/uploads/2024/05/Coconut-Curry-Leaf-Gin-Cooler-768x768.png"
+  },
+  {
+    "id": 29,
+    "name": "Raw Potato Juice",
+    "disease": "Acidity, Ulcer, Joint Pain",
+    "description": "Raw potato juice is used for treating gastritis and reducing inflammation.",
+    "ingredients": ["1 medium raw potato"],
+    "preparationMethod": [
+      "1. Wash and peel the potato.",
+      "2. Grate and extract juice using cheesecloth.",
+      "3. Drink immediately on an empty stomach."
+    ],
+    "dosage": "Once daily in the morning.",
+    "benefits": "Neutralizes acidity, supports gut health, anti-inflammatory.",
+    "precautions": "Avoid green or sprouted potatoes.",
+    "image_url": "https://media.istockphoto.com/id/1196425329/photo/old-wooden-table-with-fresh-ginger-juice.jpg?s=612x612&w=0&k=20&c=yh-tsXzoA8StoCYKalxDfg9wNa9GtmJl_foGH3JtrbI="
+  },
+  {
+    "id": 30,
+    "name": "Coconut Oil Pulling",
+    "disease": "Oral Hygiene, Bad Breath",
+    "description": "An ancient Ayurvedic practice for detoxifying the mouth and improving oral health.",
+    "ingredients": ["1 tablespoon virgin coconut oil"],
+    "preparationMethod": [
+      "1. Take 1 tablespoon of coconut oil in your mouth.",
+      "2. Swish it around for 10–15 minutes without swallowing.",
+      "3. Spit it out and rinse with warm water."
+    ],
+    "dosage": "Once daily before brushing teeth.",
+    "benefits": "Reduces bacteria, whitens teeth, freshens breath.",
+    "precautions": "Do not swallow the oil.",
+    "image_url": "https://media.istockphoto.com/id/1134310951/photo/natural-coconut-oil-for-body-care-in-organic-cosmetic-concept-on-white-desk-background.jpg?s=612x612&w=0&k=20&c=Ct2Pg1cycoDSBymtB4H1aagI7rerRpf4GCrDKAOCKjg="
+  }
+]

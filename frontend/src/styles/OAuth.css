@@ -1,0 +1,71 @@
+.oauth-btn {
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  color: #334155;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+  transition: box-shadow 0.18s, border-color 0.18s, background 0.18s, color 0.18s, opacity 0.18s;
+  outline: none;
+}
+
+.oauth-btn:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px #fee2e2;
+}
+
+.oauth-btn:hover:not(:disabled) {
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.12);
+  background: #f8fafc;
+  color: #b91c1c;
+}
+
+.oauth-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.oauth-spinner {
+  animation: oauth-spin 1s linear infinite;
+  color: #ef4444;
+  font-size: 1.25rem;
+}
+
+@keyframes oauth-spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+.oauth-error {
+  color: #dc2626;
+  margin-top: 0.75rem;
+  font-size: 0.97rem;
+  text-align: center;
+  background: #fef2f2;
+  border-radius: 0.3rem;
+  padding: 0.5rem 0.75rem;
+  font-weight: 500;
+}
+
+/* Responsive styles for small screens */
+@media (max-width: 480px) {
+  .oauth-btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+  .oauth-spinner {
+    font-size: 1rem;
+  }
+  .oauth-error {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
