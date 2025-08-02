@@ -26,13 +26,11 @@ mongoose
     process.exit(1); // Exit process on connection failure
   });
 
-const allowedOrigins = ['https://panchkarma-dun.vercel.app'];
 // Middleware
 app.use(express.json());
-// app.use(cors());
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
+  origin:"https://panchkarma-dun.vercel.app/",
+  credentials:true,
 }));
 app.use(cookieParser());
 
