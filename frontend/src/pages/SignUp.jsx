@@ -144,7 +144,6 @@ const SignUp = () => {
             {loading ? 'Creating Account...' : 'Sign Up'}
           </button>
         </form>
-
         <div className="signup-footer">
           Already have an account?{' '}
           <Link to="/sign-in" className="signup-link">
