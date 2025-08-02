@@ -5,14 +5,19 @@ import ScrollToTopButton from "../components/ScrollToTopButton";
 import "../styles/SignIn.css";
 
 const SignIn = ({ setCurrentUser }) => {
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '', confirmPassword: '', rememberMe: false });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { signin } = useAuth();
 
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    const { id, value, type, checked } = e.target;
+    if (type === 'checkbox') {
+      setFormData((prev) => ({ ...prev, [id]: checked }));
+    } else {
+      setFormData((prev) => ({ ...prev, [id]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -20,12 +25,19 @@ const SignIn = ({ setCurrentUser }) => {
     setLoading(true);
     setError(null);
 
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
     try {
+      const { ...submitData } = formData;
       const res = await fetch('http://localhost:5000/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(formData),
+        body: JSON.stringify(submitData),
       });
 
       const data = await res.json();
@@ -46,6 +58,7 @@ const SignIn = ({ setCurrentUser }) => {
     }
   };
 
+
   return (
     <>
       <div className="signin-container">
@@ -63,22 +76,40 @@ const SignIn = ({ setCurrentUser }) => {
             className="signin-input"
             required
           />
-          <input
-            type="password"
-            id="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
-            className="signin-input"
-            required
-          />
-          <button
-            type="submit"
-            className="signin-btn"
-            disabled={loading}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
+      <input
+        type="password"
+        id="password"
+        value={formData.password}
+        onChange={handleChange}
+        placeholder="Password"
+        className="signin-input"
+        required
+      />
+      <input
+        type="password"
+        id="confirmPassword"
+        value={formData.confirmPassword}
+        onChange={handleChange}
+        placeholder="Confirm Password"
+        className="signin-input"
+        required
+      />
+      <div className="checkbox-container">
+        <input
+          type="checkbox"
+          id="rememberMe"
+          checked={formData.rememberMe}
+          onChange={handleChange}
+        />
+        <label htmlFor="rememberMe" className="checkbox-label">Remember Me</label>
+      </div>
+      <button
+        type="submit"
+        className="signin-btn"
+        disabled={loading}
+      >
+        {loading ? 'Signing in...' : 'Sign In'}
+      </button>
         </form>
 
         <div className="signin-footer">

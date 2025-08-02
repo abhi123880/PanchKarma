@@ -2,11 +2,6 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    googleId: {
-      type: String,
-      unique: true,
-      sparse: true,
-    },
     username: {
       type: String,
       unique: true,
@@ -30,16 +25,22 @@ const userSchema = new mongoose.Schema(
       trim: true,
       match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"],
     },
+    phone: {
+      type: String,
+      required: true,
+      trim: true,
+      match: [/^\+?\d{10,15}$/, "Please use a valid phone number"],
+    },
     password: {
       type: String,
-      minlength: 6,
+      minlength: 8,
       validate: {
         validator: function (value) {
-
           if (this.googleId) return true;
-          return typeof value === "string" && value.length >= 6;
+          const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+          return typeof value === "string" && passwordRegex.test(value);
         },
-        message: "Password is required and must be at least 6 characters",
+        message: "Password must be at least 8 characters and include uppercase, lowercase, number, and special character",
       },
     },
     avatar: {

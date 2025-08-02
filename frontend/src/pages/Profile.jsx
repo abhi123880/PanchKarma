@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ScrollToTopButton from "../components/ScrollToTopButton";
 import '../styles/Profile.css';
 
 const Profile = ({ currentUser, setCurrentUser }) => {
@@ -10,6 +11,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     email: "",
     password: "",
     avatar: "",
+    phone: "",
   });
 
   const [message, setMessage] = useState(null);
@@ -28,12 +30,21 @@ const Profile = ({ currentUser, setCurrentUser }) => {
   };
 
   useEffect(() => {
+    console.log("Profile.jsx useEffect currentUser:", currentUser);
     if (currentUser) {
       setFormData({
         username: currentUser.username || "",
         email: currentUser.email || "",
         password: "",
         avatar: currentUser.avatar || "",
+        phone: currentUser.phone || "",
+      });
+      console.log("Profile.jsx formData set to:", {
+        username: currentUser.username || "",
+        email: currentUser.email || "",
+        password: "",
+        avatar: currentUser.avatar || "",
+        phone: currentUser.phone || "",
       });
     }
   }, [currentUser]);
@@ -203,6 +214,14 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           className="profile-input"
           required
         />
+        <input
+          type="tel"
+          id="phone"
+          value={formData.phone}
+          onChange={handleChange}
+          placeholder="Phone Number"
+          className="profile-input"
+        />
 
         <input
           type="password"
@@ -226,7 +245,9 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       </div>
       {message && <p className="profile-message">{message}</p>}
       {error && <p className="profile-error">{error}</p>}
+      <ScrollToTopButton />
     </div>
+    
   );
 };
 

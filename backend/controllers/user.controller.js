@@ -5,20 +5,17 @@ export const updateUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
     const updates = req.body;
-
-    // Security check: only allow user to update their own profile
     if (req.user.id !== userId) {
       return next(errorHandler(403, "Forbidden: cannot update another user's profile"));
     }
 
     const user = await User.findById(userId);
     if (!user) return next(errorHandler(404, "User not found"));
-
-    // Update allowed fields only
     if (updates.username) user.username = updates.username;
     if (updates.email) user.email = updates.email;
     if (updates.password) user.password = updates.password;
     if (updates.avatar) user.avatar = updates.avatar;
+    if (updates.phone) user.phone = updates.phone;
 
     await user.save();
 
@@ -31,8 +28,6 @@ export const updateUser = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
-
-    // Security check: only allow user to delete their own account
     if (req.user.id !== userId) {
       return next(errorHandler(403, "Forbidden: cannot delete another user's account"));
     }

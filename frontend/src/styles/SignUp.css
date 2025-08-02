@@ -112,3 +112,16 @@
     font-size: 1.3rem;
   }
 }
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.checkbox-label {
+  font-size: 0.95rem;
+  color: #334155;
+  user-select: none;
+}
