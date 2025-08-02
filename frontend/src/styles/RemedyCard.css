@@ -54,7 +54,6 @@
   margin: 0;
 }
 
-/* Responsive design */
 @media (max-width: 600px) {
   .remedy-card {
     max-width: 100%;
