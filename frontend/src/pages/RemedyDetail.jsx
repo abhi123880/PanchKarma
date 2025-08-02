@@ -10,7 +10,7 @@ export default function RemedyDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`https://remedy-panchkarma.onrender.com/api/remedies/${id}`)
+    fetch(`https://panchkarma.onrender.com/api/remedies/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setRemedy(data || null);
