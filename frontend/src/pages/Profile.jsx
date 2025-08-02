@@ -82,10 +82,11 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     setMessage(null);
     setError(null);
 
-    if (!currentUser || !currentUser._id) { // Use `_id` as it's the standard for MongoDB documents
-      setError("User ID is missing. Please sign in again.");
-      return;
-    }
+   const userId = currentUser?._id || currentUser?.id;
+      if (!userId) {
+        setError("User ID is missing. Please sign in again.");
+        return;
+      }
 
     try {
       const token = localStorage.getItem('token');
@@ -95,7 +96,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       }
       
       const response = await fetch(
-        `https://panchkarma.onrender.com/api/user/update/${currentUser._id}`,
+        `https://panchkarma.onrender.com/api/user/update/${userId}`,
         {
           method: "POST",
           headers: {
