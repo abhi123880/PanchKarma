@@ -28,31 +28,25 @@ mongoose
 
 // Define your frontend origin(s)
 // IMPORTANT: Replace this URL with the actual URL of your Vercel frontend deployment
-const frontendOrigin = 'https://panchkarma-dun.vercel.app/'; 
+const allowedOrigin = 'https://panchkarma-dun.vercel.app/'; 
 
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
 
-// --- CORRECTION STARTS HERE ---
-// Correct CORS configuration to allow specific origins and credentials
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps, curl)
-    if (!origin) return callback(null, true);
-    
-    // Check if the origin is in our allowed list
-    if (origin === frontendOrigin || origin === localOrigin) {
+    if (!origin || origin === allowedOrigin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true, // Crucial for allowing cookies and Authorization header
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-// --- CORRECTION ENDS HERE ---
+
 
 // Log every incoming request - for debugging
 app.use((req, res, next) => {
