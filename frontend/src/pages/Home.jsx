@@ -9,7 +9,7 @@ export function Hero() {
   return (
     <section className="hero-section" aria-label="Homepage Hero Section">
       <img
-        src="/Ayurveda.png"
+        src="/assets/ayurveda.png"
         //src="https://media.istockphoto.com/id/1349182014/photo/herbal-tea.jpg?s=612x612&w=0&k=20&c=YdnuQs5IXYrufKIwi91snRSs5zUn0G7wvxpNnStSOfw="
         alt="Natural Ayurvedic herbs and remedies display"
         className="hero-image"
