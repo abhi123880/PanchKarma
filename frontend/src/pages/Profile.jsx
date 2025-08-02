@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import '../styles/Profile.css';
 
-const Profile = ({ currentUser, setCurrentUser }) => {
+const Profile = ({ user, setUser }) => {
   const { signout } = useAuth();
   const [formData, setFormData] = useState({
     username: "",
@@ -25,29 +25,29 @@ const Profile = ({ currentUser, setCurrentUser }) => {
 
   const handleSignout = () => {
     signout();
-    setCurrentUser(null);
+    setUser(null);
     navigate('/');
   };
 
   useEffect(() => {
-    console.log("Profile.jsx useEffect currentUser:", currentUser);
-    if (currentUser) {
+    console.log("Profile.jsx useEffect user:", user);
+    if (user) {
       setFormData({
-        username: currentUser.username || "",
-        email: currentUser.email || "",
+        username: user.username || "",
+        email: user.email || "",
         password: "", // Keep password field empty for security
-        avatar: currentUser.avatar || "",
-        phone: currentUser.phone || "",
+        avatar: user.avatar || "",
+        phone: user.phone || "",
       });
       console.log("Profile.jsx formData set to:", {
-        username: currentUser.username || "",
-        email: currentUser.email || "",
+        username: user.username || "",
+        email: user.email || "",
         password: "",
-        avatar: currentUser.avatar || "",
-        phone: currentUser.phone || "",
+        avatar: user.avatar || "",
+        phone: user.phone || "",
       });
     }
-  }, [currentUser]);
+  }, [user]);
 
   useEffect(() => {
     if (file) {
@@ -65,7 +65,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   }, [file]);
 
-  if (!currentUser) {
+  if (!user) {
     return <p className="profile-no-user">No user data available</p>;
   }
 
@@ -82,7 +82,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     setMessage(null);
     setError(null);
 
-   const userId = currentUser?._id || currentUser?.id;
+   const userId = user?._id || user?.id;
       if (!userId) {
         setError("User ID is missing. Please sign in again.");
         return;
@@ -124,8 +124,8 @@ const Profile = ({ currentUser, setCurrentUser }) => {
         setMessage("Profile updated successfully!");
         setFormData((prev) => ({ ...prev, password: "" }));
 
-        if (typeof setCurrentUser === "function") {
-          setCurrentUser(data.user);
+        if (typeof setuser === "function") {
+          setUser(data.user);
         }
       }
     } catch (fetchError) {
@@ -138,7 +138,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     setMessage(null);
     setError(null);
 
-    if (!currentUser || !currentUser._id) {
+    if (!user || !user._id) {
       setError("User ID is missing. Please sign in again.");
       return;
     }
@@ -154,7 +154,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       }
 
       const response = await fetch(
-        `https://panchkarma.onrender.com/api/user/delete/${currentUser._id}`,
+        `https://panchkarma.onrender.com/api/user/delete/${user._id}`,
         {
           method: "DELETE",
           headers: {
@@ -180,8 +180,8 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       } else {
         alert("Account deleted successfully.");
         setMessage("Account deleted successfully.");
-        if (typeof setCurrentUser === "function") {
-          setCurrentUser(null);
+        if (typeof setUser === "function") {
+          setUser(null);
         }
       }
     } catch (fetchError) {
