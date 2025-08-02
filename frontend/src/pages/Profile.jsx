@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import '../styles/Profile.css';
 
-// The component now accepts 'user' and 'setUser' as props
-const Profile = ({ user, setUser }) => {
-  const { signout } = useAuth();
+// The component now correctly accepts 'currentUser' and 'setCurrentUser' as props,
+// matching the state and props passed from App.js
+const Profile = ({ currentUser, setCurrentUser }) => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -25,27 +24,31 @@ const Profile = ({ user, setUser }) => {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Signout function is now handled directly within the component
   const handleSignout = () => {
-    signout();
-    setUser(null); // Use the correct setter
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setCurrentUser(null);
     navigate('/');
   };
 
   useEffect(() => {
-    console.log("Profile.jsx useEffect user:", user);
-    if (user) {
+    console.log("Profile.jsx useEffect currentUser:", currentUser);
+    if (currentUser) {
       setFormData({
-        username: user.username || "",
-        email: user.email || "",
+        username: currentUser.username || "",
+        email: currentUser.email || "",
         password: "", // Keep password field empty for security
-        avatar: user.avatar || "",
-        phone: user.phone || "",
+        avatar: currentUser.avatar || "",
+        phone: currentUser.phone || "",
       });
       setLoading(false); // Data is loaded, stop loading
     } else {
       setLoading(false); // No user, also stop loading
+      // You could redirect here if a user tries to access this page unauthenticated
+      // navigate('/sign-in');
     }
-  }, [user]);
+  }, [currentUser, navigate]);
 
   useEffect(() => {
     if (file) {
@@ -68,7 +71,7 @@ const Profile = ({ user, setUser }) => {
     return <p className="profile-loading">Loading profile...</p>;
   }
   
-  if (!user) {
+  if (!currentUser) {
     return <p className="profile-no-user">No user data available. Please sign in.</p>;
   }
 
@@ -86,7 +89,7 @@ const Profile = ({ user, setUser }) => {
     setError(null);
 
     // Use a robust check that handles both '_id' and 'id'
-    const userId = user?._id || user?.id;
+    const userId = currentUser?._id || currentUser?.id;
     if (!userId) {
       setError("User ID is missing. Please sign in again.");
       return;
@@ -126,8 +129,10 @@ const Profile = ({ user, setUser }) => {
         setMessage("Profile updated successfully!");
         setFormData((prev) => ({ ...prev, password: "" }));
 
-        if (typeof setUser === "function") {
-          setUser(data.user);
+        if (typeof setCurrentUser === "function") {
+          setCurrentUser(data.user);
+          // Update localStorage after a successful update
+          localStorage.setItem('user', JSON.stringify(data.user));
         }
       }
     } catch (fetchError) {
@@ -140,7 +145,7 @@ const Profile = ({ user, setUser }) => {
     setMessage(null);
     setError(null);
 
-    const userId = user?._id || user?.id;
+    const userId = currentUser?._id || currentUser?.id;
     if (!userId) {
       setError("User ID is missing. Please sign in again.");
       return;
@@ -182,8 +187,10 @@ const Profile = ({ user, setUser }) => {
       } else {
         alert("Account deleted successfully.");
         setMessage("Account deleted successfully.");
-        if (typeof setUser === "function") {
-          setUser(null);
+        if (typeof setCurrentUser === "function") {
+          setCurrentUser(null);
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
         }
       }
     } catch (fetchError) {
@@ -235,9 +242,31 @@ const Profile = ({ user, setUser }) => {
           required
         />
 
-        <input type="email"   id="email"  value={formData.email} onChange={handleChange}  placeholder="Email"  className="profile-input"    required  />
-        <input type="tel" id="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number" className="profile-input"  />
-        <input type="password" id="password" value={formData.password} onChange={handleChange}  placeholder="New Password (optional)"  className="profile-input"  />
+        <input
+          type="email"
+          id="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Email"
+          className="profile-input"
+          required
+        />
+        <input
+          type="tel"
+          id="phone"
+          value={formData.phone}
+          onChange={handleChange}
+          placeholder="Phone Number"
+          className="profile-input"
+        />
+        <input
+          type="password"
+          id="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="New Password (optional)"
+          className="profile-input"
+        />
         <button
           type="submit"
           className="profile-btn"
