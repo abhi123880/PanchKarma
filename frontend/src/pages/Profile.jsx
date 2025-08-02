@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import '../styles/Profile.css';
 
+// The component receives currentUser and setCurrentUser as props
 const Profile = ({ currentUser, setCurrentUser }) => {
   const [formData, setFormData] = useState({
     username: "",
@@ -22,6 +23,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Signout function
   const handleSignout = useCallback(() => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -29,6 +31,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     navigate('/');
   }, [navigate, setCurrentUser]);
 
+  // Effect to initialize form data when currentUser prop changes
   useEffect(() => {
     console.log("Profile.jsx useEffect: currentUser =", currentUser);
     if (currentUser) {
@@ -45,6 +48,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   }, [currentUser, navigate]);
 
+  // Handle avatar file upload logic
   useEffect(() => {
     if (file) {
       const reader = new FileReader();
@@ -61,6 +65,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   }, [file]);
 
+  // Handle rendering based on loading state
   if (loading) {
     return <p className="profile-loading">Loading profile...</p>;
   }
@@ -69,6 +74,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     return <p className="profile-no-user">No user data available. Please sign in.</p>;
   }
 
+  // Handle form input changes
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -76,6 +82,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }));
   };
 
+  // Memoized handleSubmit to prevent stale closures.
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setMessage(null);
@@ -124,6 +131,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   }, [currentUser, formData, setCurrentUser]);
 
+  // Handle account deletion
   const handleDeleteAccount = useCallback(async () => {
     setMessage(null);
     setError(null);
@@ -253,9 +261,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       </div>
       {message && <p className="profile-message">{message}</p>}
       {error && <p className="profile-error">{error}</p>}
-      {/* This is the most likely point of failure.
-        We'll use a conditional check to prevent rendering if the component is invalid.
-      */}
+      {/* Conditionally render to prevent a crash if the component is invalid */}
       {ScrollToTopButton && <ScrollToTopButton />}
     </div>
   );
