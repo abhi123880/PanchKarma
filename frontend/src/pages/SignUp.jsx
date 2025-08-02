@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import OAuth from '../components/OAuth';
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import "../styles/SignUp.css";
 
@@ -91,13 +90,7 @@ const SignUp = () => {
           </button>
         </form>
 
-        <div className="signup-divider">
-          <hr className="signup-hr" />
-          <span className="signup-or">OR</span>
-          <hr className="signup-hr" />
-        </div>
 
-        <OAuth label="Continue with Google" />
 
         <div className="signup-footer">
           Already have an account?{' '}

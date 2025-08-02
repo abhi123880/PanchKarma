@@ -58,13 +58,6 @@
   cursor: not-allowed;
 }
 
-.signin-divider {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin: 1.5rem 0;
-}
-
 .signin-hr {
   flex-grow: 1;
   border: none;

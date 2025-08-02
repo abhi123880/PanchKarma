@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import OAuth from '../components/OAuth';
 import { useAuth } from '../context/AuthContext';
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import "../styles/SignIn.css";
@@ -81,14 +80,6 @@ const SignIn = ({ setCurrentUser }) => {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
-
-        <div className="signin-divider">
-          <hr className="signin-hr" />
-          <span className="signin-or">OR</span>
-          <hr className="signin-hr" />
-        </div>
-
-        <OAuth setCurrentUser={setCurrentUser} />
 
         <div className="signin-footer">
           Don’t have an account?{' '}

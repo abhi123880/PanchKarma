@@ -58,13 +58,6 @@
   cursor: not-allowed;
 }
 
-.signup-divider {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin: 1.5rem 0;
-}
-
 .signup-hr {
   flex-grow: 1;
   border: none;

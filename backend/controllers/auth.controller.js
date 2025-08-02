@@ -1,8 +1,6 @@
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
-  
-// Helper to create token and set cookie
 const createSendToken = (user, res) => {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "1d",
@@ -12,15 +10,13 @@ const createSendToken = (user, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    maxAge: 24 * 60 * 60 * 1000, 
   };
 
   console.log("Setting cookie with options:", cookieOptions);
 
   res.cookie("access_token", token, cookieOptions);
 };
-
-// Signup with email and password (no bcrypt for demo)
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
 
@@ -52,8 +48,6 @@ export const signup = async (req, res, next) => {
     next(errorHandler(500, error.message));
   }
 };
-
-// Signin with email and password (no bcrypt for demo)
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -100,10 +94,5 @@ function generateRandomPassword(length = 12) {
 }
 
 export const googleAuth = async (req, res, next) => {
-  const { token } = req.body;
-
-  if (!token) return res.status(400).json({ message: "Token missing" });
-
-  // Since Firebase is not needed, reject or handle differently
-  return res.status(400).json({ message: "Firebase authentication is disabled" });
+  res.status(501).json({ message: "Google authentication is not implemented" });
 };
