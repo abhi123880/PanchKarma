@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import '../styles/Profile.css';
 
-// Component receives currentUser and setCurrentUser as props
+// The component receives currentUser and setCurrentUser as props
 const Profile = ({ currentUser, setCurrentUser }) => {
-  // Use a local state for form data, initializing with a default empty object
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -25,18 +24,17 @@ const Profile = ({ currentUser, setCurrentUser }) => {
   const [loading, setLoading] = useState(true);
 
   // Signout function
-  const handleSignout = () => {
+  const handleSignout = useCallback(() => {
     localStorage.removeItem("user");
-    localStorage.removeItem("token"); // Assuming you store a token
+    localStorage.removeItem("token");
     setCurrentUser(null);
     navigate('/');
-  };
+  }, [navigate, setCurrentUser]);
 
   // Effect to initialize form data when currentUser prop changes
   useEffect(() => {
     console.log("Profile.jsx useEffect: currentUser =", currentUser);
     if (currentUser) {
-      // Correctly initialize formData with currentUser data
       setFormData({
         username: currentUser.username || "",
         email: currentUser.email || "",
@@ -46,7 +44,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       });
       setLoading(false);
     } else {
-      // If no user, also stop loading
       setLoading(false);
       // Optional: Redirect if user is not authenticated
       // navigate('/sign-in');
@@ -75,7 +72,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     return <p className="profile-loading">Loading profile...</p>;
   }
   
-  // Handle rendering if no user is found
   if (!currentUser) {
     return <p className="profile-no-user">No user data available. Please sign in.</p>;
   }
@@ -88,14 +84,15 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }));
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
+  // Memoized handleSubmit to prevent stale closures.
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
 
     setMessage(null);
     setError(null);
 
-    // This is the core check for the user ID. It should always pass if currentUser is not null.
+    // Get the user ID directly from the prop here.
+    // This is the most critical change.
     const userId = currentUser?._id || currentUser?.id;
     if (!userId) {
       setError("User ID is missing. Please sign in again.");
@@ -144,10 +141,10 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       console.error("An unexpected error occurred:", fetchError);
       setError("An unexpected error occurred.");
     }
-  };
+  }, [currentUser, formData, setCurrentUser]);
 
   // Handle account deletion
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = useCallback(async () => {
     setMessage(null);
     setError(null);
 
@@ -203,14 +200,14 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       alert("An unexpected error occurred.");
       setError("An unexpected error occurred.");
     }
-  };
+  }, [currentUser, setCurrentUser]);
+
 
   // Return the JSX for the profile page
   return (
     <div className="profile-container">
       <h1 className="profile-title">Your Profile</h1>
       <form onSubmit={handleSubmit} className="profile-form">
-        {/* ... form inputs ... */}
         <input
           type="file"
           accept="image/*"
@@ -290,7 +287,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
 };
 
 export default Profile;
-
 // import { useState, useEffect, useRef } from "react";
 // import { useNavigate } from 'react-router-dom';
 // import { useAuth } from '../context/AuthContext';
