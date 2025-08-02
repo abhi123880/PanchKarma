@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import '../styles/Profile.css';
 
+// The component now accepts 'user' and 'setUser' as props
 const Profile = ({ user, setUser }) => {
   const { signout } = useAuth();
   const [formData, setFormData] = useState({
@@ -22,10 +23,11 @@ const Profile = ({ user, setUser }) => {
 
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleSignout = () => {
     signout();
-    setUser(null);
+    setUser(null); // Use the correct setter
     navigate('/');
   };
 
@@ -39,13 +41,9 @@ const Profile = ({ user, setUser }) => {
         avatar: user.avatar || "",
         phone: user.phone || "",
       });
-      console.log("Profile.jsx formData set to:", {
-        username: user.username || "",
-        email: user.email || "",
-        password: "",
-        avatar: user.avatar || "",
-        phone: user.phone || "",
-      });
+      setLoading(false); // Data is loaded, stop loading
+    } else {
+      setLoading(false); // No user, also stop loading
     }
   }, [user]);
 
@@ -65,8 +63,13 @@ const Profile = ({ user, setUser }) => {
     }
   }, [file]);
 
+  // Handle loading and no user states at the beginning of the render
+  if (loading) {
+    return <p className="profile-loading">Loading profile...</p>;
+  }
+  
   if (!user) {
-    return <p className="profile-no-user">No user data available</p>;
+    return <p className="profile-no-user">No user data available. Please sign in.</p>;
   }
 
   const handleChange = (e) => {
@@ -82,11 +85,12 @@ const Profile = ({ user, setUser }) => {
     setMessage(null);
     setError(null);
 
-   const userId = user?._id || user?.id;
-      if (!userId) {
-        setError("User ID is missing. Please sign in again.");
-        return;
-      }
+    // Use a robust check that handles both '_id' and 'id'
+    const userId = user?._id || user?.id;
+    if (!userId) {
+      setError("User ID is missing. Please sign in again.");
+      return;
+    }
 
     try {
       const token = localStorage.getItem('token');
@@ -103,12 +107,10 @@ const Profile = ({ user, setUser }) => {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
           },
-          // credentials: "include", // Can remove this if you rely solely on the Authorization header
           body: JSON.stringify(formData),
         }
       );
 
-      // Handle cases where the response body is not valid JSON
       let data;
       try {
         data = await response.json();
@@ -124,7 +126,7 @@ const Profile = ({ user, setUser }) => {
         setMessage("Profile updated successfully!");
         setFormData((prev) => ({ ...prev, password: "" }));
 
-        if (typeof setuser === "function") {
+        if (typeof setUser === "function") {
           setUser(data.user);
         }
       }
@@ -138,7 +140,8 @@ const Profile = ({ user, setUser }) => {
     setMessage(null);
     setError(null);
 
-    if (!user || !user._id) {
+    const userId = user?._id || user?.id;
+    if (!userId) {
       setError("User ID is missing. Please sign in again.");
       return;
     }
@@ -154,13 +157,12 @@ const Profile = ({ user, setUser }) => {
       }
 
       const response = await fetch(
-        `https://panchkarma.onrender.com/api/user/delete/${user._id}`,
+        `https://panchkarma.onrender.com/api/user/delete/${userId}`,
         {
           method: "DELETE",
           headers: {
             "Authorization": `Bearer ${token}`
           },
-          // credentials: "include", // Can remove this if you rely solely on the Authorization header
         }
       );
 
@@ -233,31 +235,9 @@ const Profile = ({ user, setUser }) => {
           required
         />
 
-        <input
-          type="email"
-          id="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Email"
-          className="profile-input"
-          required
-        />
-        <input
-          type="tel"
-          id="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          placeholder="Phone Number"
-          className="profile-input"
-        />
-        <input
-          type="password"
-          id="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="New Password (optional)"
-          className="profile-input"
-        />
+        <input type="email"   id="email"  value={formData.email} onChange={handleChange}  placeholder="Email"  className="profile-input"    required  />
+        <input type="tel" id="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number" className="profile-input"  />
+        <input type="password" id="password" value={formData.password} onChange={handleChange}  placeholder="New Password (optional)"  className="profile-input"  />
         <button
           type="submit"
           className="profile-btn"
