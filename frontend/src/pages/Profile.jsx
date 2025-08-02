@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import '../styles/Profile.css';
 
-// The component receives currentUser and setCurrentUser as props
 const Profile = ({ currentUser, setCurrentUser }) => {
   const [formData, setFormData] = useState({
     username: "",
@@ -23,7 +22,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Signout function
   const handleSignout = useCallback(() => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -31,7 +29,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     navigate('/');
   }, [navigate, setCurrentUser]);
 
-  // Effect to initialize form data when currentUser prop changes
   useEffect(() => {
     console.log("Profile.jsx useEffect: currentUser =", currentUser);
     if (currentUser) {
@@ -45,12 +42,9 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       setLoading(false);
     } else {
       setLoading(false);
-      // Optional: Redirect if user is not authenticated
-      // navigate('/sign-in');
     }
   }, [currentUser, navigate]);
 
-  // Handle avatar file upload logic
   useEffect(() => {
     if (file) {
       const reader = new FileReader();
@@ -67,7 +61,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   }, [file]);
 
-  // Handle rendering based on loading state
   if (loading) {
     return <p className="profile-loading">Loading profile...</p>;
   }
@@ -76,7 +69,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     return <p className="profile-no-user">No user data available. Please sign in.</p>;
   }
 
-  // Handle form input changes
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -84,28 +76,21 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }));
   };
 
-  // Memoized handleSubmit to prevent stale closures.
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-
     setMessage(null);
     setError(null);
-
-    // Get the user ID directly from the prop here.
-    // This is the most critical change.
     const userId = currentUser?._id || currentUser?.id;
     if (!userId) {
       setError("User ID is missing. Please sign in again.");
       return;
     }
-
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         setError("Authentication token missing. Please sign in.");
         return;
       }
-      
       const response = await fetch(
         `https://panchkarma.onrender.com/api/user/update/${userId}`,
         {
@@ -117,7 +102,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           body: JSON.stringify(formData),
         }
       );
-
       let data;
       try {
         data = await response.json();
@@ -126,14 +110,11 @@ const Profile = ({ currentUser, setCurrentUser }) => {
         setError("Failed to process the response from the server.");
         return;
       }
-
       if (!response.ok) {
         setError(data.message || "Failed to update profile");
       } else {
         setMessage("Profile updated successfully!");
         setFormData((prev) => ({ ...prev, password: "" }));
-        
-        // Update the state and localStorage with the new user data from the server
         setCurrentUser(data.user);
         localStorage.setItem('user', JSON.stringify(data.user));
       }
@@ -143,17 +124,14 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   }, [currentUser, formData, setCurrentUser]);
 
-  // Handle account deletion
   const handleDeleteAccount = useCallback(async () => {
     setMessage(null);
     setError(null);
-
     const userId = currentUser?._id || currentUser?.id;
     if (!userId) {
       setError("User ID is missing. Please sign in again.");
       return;
     }
-
     if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
       return;
     }
@@ -163,7 +141,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
         setError("Authentication token missing. Please sign in.");
         return;
       }
-
       const response = await fetch(
         `https://panchkarma.onrender.com/api/user/delete/${userId}`,
         {
@@ -173,7 +150,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           },
         }
       );
-
       let data;
       try {
         data = await response.json();
@@ -183,14 +159,12 @@ const Profile = ({ currentUser, setCurrentUser }) => {
         setError("Failed to process the response from the server.");
         return;
       }
-
       if (!response.ok) {
         alert(data.message || "Failed to delete account");
         setError(data.message || "Failed to delete account");
       } else {
         alert("Account deleted successfully.");
         setMessage("Account deleted successfully.");
-        // Clear user state and localStorage
         setCurrentUser(null);
         localStorage.removeItem("user");
         localStorage.removeItem("token");
@@ -202,8 +176,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   }, [currentUser, setCurrentUser]);
 
-
-  // Return the JSX for the profile page
   return (
     <div className="profile-container">
       <h1 className="profile-title">Your Profile</h1>
@@ -281,7 +253,10 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       </div>
       {message && <p className="profile-message">{message}</p>}
       {error && <p className="profile-error">{error}</p>}
-      <ScrollToTopButton />
+      {/* This is the most likely point of failure.
+        We'll use a conditional check to prevent rendering if the component is invalid.
+      */}
+      {ScrollToTopButton && <ScrollToTopButton />}
     </div>
   );
 };
