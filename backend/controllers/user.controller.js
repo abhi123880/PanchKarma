@@ -11,61 +11,106 @@ export const updateUser = async (req, res, next) => {
       return next(errorHandler(403, "Forbidden: You can only update your own profile"));
     }
 
-    // Directly set the password if it's being updated (no hashing)
+    // Create an object to hold the fields we want to update
+    const updatedFields = {};
+
+    // Check for fields to update
+    if (updates.username) updatedFields.username = updates.username;
+    if (updates.email) updatedFields.email = updates.email;
+    if (updates.phone) updatedFields.phone = updates.phone;
+
+    // Optionally update the password if provided, no hashing applied
     if (updates.password) {
-      updates.password = updates.password; // No bcrypt hashing
+      updatedFields.password = updates.password; // Keep raw password as per your requirement
     }
-    
-    // Find the user and update the fields, using `findByIdAndUpdate` for a single, atomic operation
+
+    // Find the user and update the fields using `findByIdAndUpdate`
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { $set: { // Use $set to update only the fields provided
-        username: updates.username,
-        email: updates.email,
-        password: updates.password,
-        avatar: updates.avatar,
-        phone: updates.phone
-      }},
-      { new: true, runValidators: true } // `new: true` returns the updated document, `runValidators: true` ensures validation runs
+      { $set: updatedFields }, // Update only the fields provided
+      { new: true } // Return the updated document
     );
-    
+
     if (!updatedUser) {
       return next(errorHandler(404, "User not found"));
     }
 
-    // Remove password from the response for security
-    const { password, ...restOfUser } = updatedUser._doc;
-
-    res.status(200).json({ success: true, message: "Profile updated", user: restOfUser });
+    // Respond with the updated user data
+    return res.status(200).json({ message: "User updated successfully", user: updatedUser });
+  
   } catch (error) {
-    console.error("Error in updateUser:", error);
-    next(errorHandler(500, error.message));
+    return next(errorHandler(500, error.message));
   }
 };
 
-// Keep the deleteUser function as is
-export const deleteUser = async (req, res, next) => {
-  try {
-    const userId = req.params.id;
-    if (req.user.id !== userId) {
-      return next(errorHandler(403, "Forbidden: You can only delete your own account"));
-    }
+// import User from "../models/user.model.js";
+// import { errorHandler } from "../utils/error.js";
 
-    const deletedUser = await User.findByIdAndDelete(userId);
-    
-    if (!deletedUser) {
-        return next(errorHandler(404, "User not found"));
-    }
+// export const updateUser = async (req, res, next) => {
+//   try {
+//     const userId = req.params.id;
+//     const updates = req.body;
 
-    // Clear the token cookie on successful deletion
-    res.clearCookie('access_token');
+//     // Check if the user making the request is the same as the user being updated
+//     if (req.user.id !== userId) {
+//       return next(errorHandler(403, "Forbidden: You can only update your own profile"));
+//     }
+
+//     // Directly set the password if it's being updated (no hashing)
+//     if (updates.password) {
+//       updates.password = updates.password; // No bcrypt hashing
+//     }
     
-    res.status(200).json({ success: true, message: "Account deleted successfully" });
-  } catch (error) {
-    console.error("Error in deleteUser:", error);
-    next(errorHandler(500, error.message));
-  }
-};
+//     // Find the user and update the fields, using `findByIdAndUpdate` for a single, atomic operation
+//     const updatedUser = await User.findByIdAndUpdate(
+//       userId,
+//       { $set: { // Use $set to update only the fields provided
+//         username: updates.username,
+//         email: updates.email,
+//         password: updates.password,
+//         avatar: updates.avatar,
+//         phone: updates.phone
+//       }},
+//       { new: true, runValidators: true } // `new: true` returns the updated document, `runValidators: true` ensures validation runs
+//     );
+    
+//     if (!updatedUser) {
+//       return next(errorHandler(404, "User not found"));
+//     }
+
+//     // Remove password from the response for security
+//     const { password, ...restOfUser } = updatedUser._doc;
+
+//     res.status(200).json({ success: true, message: "Profile updated", user: restOfUser });
+//   } catch (error) {
+//     console.error("Error in updateUser:", error);
+//     next(errorHandler(500, error.message));
+//   }
+// };
+
+// // Keep the deleteUser function as is
+// export const deleteUser = async (req, res, next) => {
+//   try {
+//     const userId = req.params.id;
+//     if (req.user.id !== userId) {
+//       return next(errorHandler(403, "Forbidden: You can only delete your own account"));
+//     }
+
+//     const deletedUser = await User.findByIdAndDelete(userId);
+    
+//     if (!deletedUser) {
+//         return next(errorHandler(404, "User not found"));
+//     }
+
+//     // Clear the token cookie on successful deletion
+//     res.clearCookie('access_token');
+    
+//     res.status(200).json({ success: true, message: "Account deleted successfully" });
+//   } catch (error) {
+//     console.error("Error in deleteUser:", error);
+//     next(errorHandler(500, error.message));
+//   }
+// };
 
 // import User from "../models/user.model.js";
 // import { errorHandler } from "../utils/error.js";
