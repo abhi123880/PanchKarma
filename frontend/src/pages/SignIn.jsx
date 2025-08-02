@@ -36,7 +36,6 @@ const SignIn = ({ setCurrentUser }) => {
       const res = await fetch('https://panchkarma.onrender.com/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify(submitData),
       });
 
