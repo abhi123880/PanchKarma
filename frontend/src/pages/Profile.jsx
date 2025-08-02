@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import '../styles/Profile.css';
 
-// The component now correctly accepts 'currentUser' and 'setCurrentUser' as props,
-// matching the state and props passed from App.js
+// Component receives currentUser and setCurrentUser as props
 const Profile = ({ currentUser, setCurrentUser }) => {
+  // Use a local state for form data, initializing with a default empty object
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -24,39 +24,43 @@ const Profile = ({ currentUser, setCurrentUser }) => {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Signout function is now handled directly within the component
+  // Signout function
   const handleSignout = () => {
     localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    localStorage.removeItem("token"); // Assuming you store a token
     setCurrentUser(null);
     navigate('/');
   };
 
+  // Effect to initialize form data when currentUser prop changes
   useEffect(() => {
-    console.log("Profile.jsx useEffect currentUser:", currentUser);
+    console.log("Profile.jsx useEffect: currentUser =", currentUser);
     if (currentUser) {
+      // Correctly initialize formData with currentUser data
       setFormData({
         username: currentUser.username || "",
         email: currentUser.email || "",
-        password: "", // Keep password field empty for security
+        password: "",
         avatar: currentUser.avatar || "",
         phone: currentUser.phone || "",
       });
-      setLoading(false); // Data is loaded, stop loading
+      setLoading(false);
     } else {
-      setLoading(false); // No user, also stop loading
-      // You could redirect here if a user tries to access this page unauthenticated
+      // If no user, also stop loading
+      setLoading(false);
+      // Optional: Redirect if user is not authenticated
       // navigate('/sign-in');
     }
   }, [currentUser, navigate]);
 
+  // Handle avatar file upload logic
   useEffect(() => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData((prev) => ({ ...prev, avatar: reader.result }));
         setFileUploadError(false);
-        setFilePerc(100); // Simulated upload
+        setFilePerc(100);
       };
       reader.onerror = () => {
         setFileUploadError(true);
@@ -66,15 +70,17 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   }, [file]);
 
-  // Handle loading and no user states at the beginning of the render
+  // Handle rendering based on loading state
   if (loading) {
     return <p className="profile-loading">Loading profile...</p>;
   }
   
+  // Handle rendering if no user is found
   if (!currentUser) {
     return <p className="profile-no-user">No user data available. Please sign in.</p>;
   }
 
+  // Handle form input changes
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -82,13 +88,14 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setMessage(null);
     setError(null);
 
-    // Use a robust check that handles both '_id' and 'id'
+    // This is the core check for the user ID. It should always pass if currentUser is not null.
     const userId = currentUser?._id || currentUser?.id;
     if (!userId) {
       setError("User ID is missing. Please sign in again.");
@@ -128,12 +135,10 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       } else {
         setMessage("Profile updated successfully!");
         setFormData((prev) => ({ ...prev, password: "" }));
-
-        if (typeof setCurrentUser === "function") {
-          setCurrentUser(data.user);
-          // Update localStorage after a successful update
-          localStorage.setItem('user', JSON.stringify(data.user));
-        }
+        
+        // Update the state and localStorage with the new user data from the server
+        setCurrentUser(data.user);
+        localStorage.setItem('user', JSON.stringify(data.user));
       }
     } catch (fetchError) {
       console.error("An unexpected error occurred:", fetchError);
@@ -141,6 +146,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   };
 
+  // Handle account deletion
   const handleDeleteAccount = async () => {
     setMessage(null);
     setError(null);
@@ -187,11 +193,10 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       } else {
         alert("Account deleted successfully.");
         setMessage("Account deleted successfully.");
-        if (typeof setCurrentUser === "function") {
-          setCurrentUser(null);
-          localStorage.removeItem("user");
-          localStorage.removeItem("token");
-        }
+        // Clear user state and localStorage
+        setCurrentUser(null);
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
       }
     } catch (fetchError) {
       console.error("An unexpected error occurred:", fetchError);
@@ -200,11 +205,12 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   };
 
+  // Return the JSX for the profile page
   return (
     <div className="profile-container">
       <h1 className="profile-title">Your Profile</h1>
-
       <form onSubmit={handleSubmit} className="profile-form">
+        {/* ... form inputs ... */}
         <input
           type="file"
           accept="image/*"
@@ -213,7 +219,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           className="profile-file-input"
           hidden
         />
-
         <div className="profile-avatar-wrapper">
           <img
             onClick={() => fileRef.current.click()}
@@ -231,7 +236,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
             ) : null}
           </p>
         </div>
-
         <input
           type="text"
           id="username"
@@ -241,7 +245,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           className="profile-input"
           required
         />
-
         <input
           type="email"
           id="email"
@@ -267,16 +270,17 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           placeholder="New Password (optional)"
           className="profile-input"
         />
-        <button
-          type="submit"
-          className="profile-btn"
-        >
+        <button type="submit" className="profile-btn">
           Update Profile
         </button>
       </form>
       <div className="profile-actions">
-        <span className="profile-delete" onClick={handleDeleteAccount}>Delete account</span>
-        <span className="profile-signout" onClick={handleSignout}>Sign Out</span>
+        <span className="profile-delete" onClick={handleDeleteAccount}>
+          Delete account
+        </span>
+        <span className="profile-signout" onClick={handleSignout}>
+          Sign Out
+        </span>
       </div>
       {message && <p className="profile-message">{message}</p>}
       {error && <p className="profile-error">{error}</p>}
