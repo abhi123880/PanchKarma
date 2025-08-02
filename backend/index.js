@@ -28,8 +28,7 @@ mongoose
 
 // Define your frontend origin(s)
 // IMPORTANT: Replace this URL with the actual URL of your Vercel frontend deployment
-const frontendOrigin = 'https://your-frontend-app.vercel.app'; 
-const localOrigin = 'http://localhost:5173'; // For local development
+const frontendOrigin = 'https://panchkarma-dun.vercel.app/'; 
 
 // Middleware
 app.use(express.json());
