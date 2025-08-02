@@ -1,21 +1,15 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
-
-// Create the context
 const AuthContext = createContext();
 
-// Custom hook for easy access
 export function useAuth() {
   return useContext(AuthContext);
 }
 
-// The provider component
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Load user from localStorage on mount
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -24,7 +18,6 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  // Sign in (real API call)
   const signin = async (email, password) => {
     setLoading(true);
     setError(null);
@@ -51,8 +44,6 @@ export function AuthProvider({ children }) {
       return false;
     }
   };
-
-  // Sign out
   const signout = () => {
     setUser(null);
     localStorage.removeItem("user");
