@@ -26,26 +26,16 @@ mongoose
     process.exit(1);
   });
 
-// Define your frontend origin(s)
-// IMPORTANT: Replace this URL with the actual URL of your Vercel frontend deployment
-const allowedOrigin = 'https://panchkarma-dun.vercel.app/'; 
 
 // Middleware
+app.use(cors({
+  origin: '*', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true, 
+}));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || origin === allowedOrigin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
 
 
 // Log every incoming request - for debugging
