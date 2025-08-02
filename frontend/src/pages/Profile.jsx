@@ -95,10 +95,9 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            //"Authorization": `Bearer ${token}`
           },
-          credentials: "include",
-          body: JSON.stringify(formData),
+           body: JSON.stringify(formData),
         }
       );
 
@@ -138,9 +137,8 @@ const Profile = ({ currentUser, setCurrentUser }) => {
         {
           method: "DELETE",
           headers: {
-            "Authorization": `Bearer ${token}`
+            "Content-Type": "application/json",
           },
-          credentials: "include",
         }
       );
 
