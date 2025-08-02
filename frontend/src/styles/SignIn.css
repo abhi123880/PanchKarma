@@ -101,7 +101,6 @@
   padding: 0.7rem 1rem;
 }
 
-/* Responsive */
 @media (max-width: 600px) {
   .signin-container {
     max-width: 98vw;
