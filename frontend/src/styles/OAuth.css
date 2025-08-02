@@ -54,8 +54,6 @@
   padding: 0.5rem 0.75rem;
   font-weight: 500;
 }
-
-/* Responsive styles for small screens */
 @media (max-width: 480px) {
   .oauth-btn {
     font-size: 0.875rem;
