@@ -8,7 +8,6 @@ export const updateUser = async (req, res, next) => {
     if (req.user.id !== userId) {
       return next(errorHandler(403, "Forbidden: cannot update another user's profile"));
     }
-
     const user = await User.findById(userId);
     if (!user) return next(errorHandler(404, "User not found"));
     if (updates.username) user.username = updates.username;
