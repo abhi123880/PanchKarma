@@ -90,7 +90,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(
-        `http://localhost:5000/api/user/update/${currentUser.id}`,
+        `https://remedy-panchkarma.onrender.com/api/user/update/${currentUser.id}`,
         {
           method: "POST",
           headers: {
@@ -134,7 +134,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(
-        `http://localhost:5000/api/user/delete/${currentUser.id}`,
+        `https://remedy-panchkarma.onrender.com/api/user/delete/${currentUser.id}`,
         {
           method: "DELETE",
           headers: {
