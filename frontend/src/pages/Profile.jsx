@@ -35,7 +35,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       setFormData({
         username: currentUser.username || "",
         email: currentUser.email || "",
-        password: "",
+        password: "", // Keep password field empty for security
         avatar: currentUser.avatar || "",
         phone: currentUser.phone || "",
       });
@@ -82,27 +82,40 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     setMessage(null);
     setError(null);
 
-    if (!currentUser || !currentUser.id) {
+    if (!currentUser || !currentUser._id) { // Use `_id` as it's the standard for MongoDB documents
       setError("User ID is missing. Please sign in again.");
       return;
     }
 
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        setError("Authentication token missing. Please sign in.");
+        return;
+      }
+      
       const response = await fetch(
-        `https://panchkarma.onrender.com/api/user/update/${currentUser.id}`,
+        `https://panchkarma.onrender.com/api/user/update/${currentUser._id}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
           },
-          credentials: "include",
+          // credentials: "include", // Can remove this if you rely solely on the Authorization header
           body: JSON.stringify(formData),
         }
       );
 
-      const data = await response.json();
+      // Handle cases where the response body is not valid JSON
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        console.error("Failed to parse JSON response:", jsonError);
+        setError("Failed to process the response from the server.");
+        return;
+      }
 
       if (!response.ok) {
         setError(data.message || "Failed to update profile");
@@ -114,7 +127,8 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           setCurrentUser(data.user);
         }
       }
-    } catch {
+    } catch (fetchError) {
+      console.error("An unexpected error occurred:", fetchError);
       setError("An unexpected error occurred.");
     }
   };
@@ -123,7 +137,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     setMessage(null);
     setError(null);
 
-    if (!currentUser || !currentUser.id) {
+    if (!currentUser || !currentUser._id) {
       setError("User ID is missing. Please sign in again.");
       return;
     }
@@ -133,18 +147,31 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        setError("Authentication token missing. Please sign in.");
+        return;
+      }
+
       const response = await fetch(
-        `https://panchkarma.onrender.com/api/user/delete/${currentUser.id}`,
+        `https://panchkarma.onrender.com/api/user/delete/${currentUser._id}`,
         {
           method: "DELETE",
           headers: {
             "Authorization": `Bearer ${token}`
           },
-          credentials: "include",
+          // credentials: "include", // Can remove this if you rely solely on the Authorization header
         }
       );
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        console.error("Failed to parse JSON response:", jsonError);
+        alert("Failed to process the response from the server.");
+        setError("Failed to process the response from the server.");
+        return;
+      }
 
       if (!response.ok) {
         alert(data.message || "Failed to delete account");
@@ -156,7 +183,8 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           setCurrentUser(null);
         }
       }
-    } catch {
+    } catch (fetchError) {
+      console.error("An unexpected error occurred:", fetchError);
       alert("An unexpected error occurred.");
       setError("An unexpected error occurred.");
     }
@@ -243,7 +271,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       {message && <p className="profile-message">{message}</p>}
       {error && <p className="profile-error">{error}</p>}
       <ScrollToTopButton />
-    </div>    
+    </div>
   );
 };
 
