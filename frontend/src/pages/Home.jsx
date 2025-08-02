@@ -45,7 +45,7 @@ export default function Home({ searchQuery = "" }) {
   const prevScrollTop = useRef(0);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/remedies')
+    fetch('https://remedy-panchkarma.onrender.com/api/remedies')
       .then((response) => response.json())
       .then((data) => {
         setRemediesData(data);
