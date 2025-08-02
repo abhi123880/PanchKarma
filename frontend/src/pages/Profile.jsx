@@ -72,7 +72,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     try {
       // Note: no user ID or token needed
       const response = await fetch(
-        `https://panchkarma.onrender.com/api/user/update`, // just update endpoint
+        `https://panchkarma.onrender.com/api/user/update/${currentUser.id}`, // just update endpoint
         {
           method: "POST",
           headers: {
@@ -107,7 +107,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     try {
       // No ID or token needed, send email to identify
       const response = await fetch(
-        `https://panchkarma.onrender.com/api/user/delete`,
+        `https://panchkarma.onrender.com/api/user/delete/${currentUser.id}`,
         {
           method: "DELETE",
           headers: {
