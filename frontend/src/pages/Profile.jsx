@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';  // keep signout
+import { useAuth } from '../context/AuthContext';
 import ScrollToTopButton from "../components/ScrollToTopButton";
 import '../styles/Profile.css';
 
 const Profile = ({ currentUser, setCurrentUser }) => {
-  const { signout } = useAuth();   // keep signout hook
+  const { signout } = useAuth();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -19,28 +19,33 @@ const Profile = ({ currentUser, setCurrentUser }) => {
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined);
   const navigate = useNavigate();
-
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
 
+  // Sign out
   const handleSignout = () => {
     signout();
     setCurrentUser(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     navigate('/');
   };
 
+  // Initialize form data
   useEffect(() => {
-    if (currentUser) {
+    const storedUser = currentUser || JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
       setFormData({
-        username: currentUser.username || "",
-        email: currentUser.email || "",
+        username: storedUser.username || "",
+        email: storedUser.email || "",
         password: "",
-        avatar: currentUser.avatar || "",
-        phone: currentUser.phone || "",
+        avatar: storedUser.avatar || "",
+        phone: storedUser.phone || "",
       });
     }
   }, [currentUser]);
 
+  // Handle file upload simulation
   useEffect(() => {
     if (file) {
       const reader = new FileReader();
@@ -57,6 +62,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   }, [file]);
 
+  // Handle input change
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -64,23 +70,25 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }));
   };
 
+  // Submit update
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage(null);
     setError(null);
 
+    const userId = currentUser?.id || JSON.parse(localStorage.getItem("user"))?.id;
+
+    if (!userId) {
+      setError("User ID not found. Please sign in again.");
+      return;
+    }
+
     try {
-      // Note: no user ID or token needed
-      const response = await fetch(
-        `https://panchkarma.onrender.com/api/user/update/${currentUser.id}`, // just update endpoint
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`https://panchkarma.onrender.com/api/user/update/${userId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
       const data = await response.json();
 
@@ -89,6 +97,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       } else {
         setMessage("Profile updated successfully!");
         setFormData((prev) => ({ ...prev, password: "" }));
+        localStorage.setItem("user", JSON.stringify(data.user || formData));
         if (typeof setCurrentUser === "function") {
           setCurrentUser(data.user || formData);
         }
@@ -98,24 +107,25 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   };
 
+  // Delete account
   const handleDeleteAccount = async () => {
     setMessage(null);
     setError(null);
 
+    const userId = currentUser?.id || JSON.parse(localStorage.getItem("user"))?.id;
+
+    if (!userId) {
+      setError("User ID not found. Please sign in again.");
+      return;
+    }
+
     if (!window.confirm("Are you sure you want to delete your account?")) return;
 
     try {
-      // No ID or token needed, send email to identify
-      const response = await fetch(
-        `https://panchkarma.onrender.com/api/user/delete/${currentUser.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: formData.email }),
-        }
-      );
+      const response = await fetch(`https://panchkarma.onrender.com/api/user/delete/${userId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
 
       const data = await response.json();
 
@@ -123,17 +133,18 @@ const Profile = ({ currentUser, setCurrentUser }) => {
         setError(data.message || "Failed to delete account");
       } else {
         alert("Account deleted successfully.");
-        setMessage("Account deleted successfully.");
-        if (typeof setCurrentUser === "function") {
-          setCurrentUser(null);
-        }
+        localStorage.removeItem("user");
+        setCurrentUser(null);
+        navigate("/");
       }
     } catch {
       setError("An unexpected error occurred.");
     }
   };
 
-  if (!currentUser) {
+  const userExists = currentUser || JSON.parse(localStorage.getItem("user"));
+
+  if (!userExists) {
     return <p className="profile-no-user">No user data available</p>;
   }
 
@@ -202,9 +213,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           className="profile-input"
         />
 
-        <button type="submit" className="profile-btn">
-          Update Profile
-        </button>
+        <button type="submit" className="profile-btn">Update Profile</button>
       </form>
 
       <div className="profile-actions">
@@ -221,7 +230,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
 };
 
 export default Profile;
-
 
 // import { useState, useEffect, useRef } from "react";
 // import { useNavigate } from 'react-router-dom';
