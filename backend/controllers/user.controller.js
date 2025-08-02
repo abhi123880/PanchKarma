@@ -1,6 +1,5 @@
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
-import bcryptjs from 'bcryptjs'; // Import bcryptjs
 
 export const updateUser = async (req, res, next) => {
   try {
@@ -12,9 +11,9 @@ export const updateUser = async (req, res, next) => {
       return next(errorHandler(403, "Forbidden: You can only update your own profile"));
     }
 
-    // Hash the password if it's being updated
+    // Directly set the password if it's being updated (no hashing)
     if (updates.password) {
-      updates.password = bcryptjs.hashSync(updates.password, 10);
+      updates.password = updates.password; // No bcrypt hashing
     }
     
     // Find the user and update the fields, using `findByIdAndUpdate` for a single, atomic operation
@@ -44,6 +43,7 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
+// Keep the deleteUser function as is
 export const deleteUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
