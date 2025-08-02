@@ -57,8 +57,6 @@ const SignIn = ({ setCurrentUser }) => {
       setLoading(false);
     }
   };
-
-
   return (
     <>
       <div className="signin-container">
