@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("https://remedy-panchkarma.onrender.com/api/auth/signin", {
+      const response = await fetch("https://panchkarma.onrender.com/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
