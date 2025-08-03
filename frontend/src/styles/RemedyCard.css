@@ -1,4 +1,4 @@
-.remedy-card {
+/* .remedy-card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,7 +10,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  max-width: 300px; /* Compact width for vertical images */
+  max-width: 300px; 
   width: 100%;
   outline: none;
 }
@@ -23,12 +23,12 @@
 
 .remedy-card-image {
   width: 100%;
-  max-height: 300px; /* Increased for vertical images */
-  object-fit: contain; /* Ensures full image is visible */
-  object-position: center; /* Centers the image */
+  max-height: 300px; 
+  object-fit: contain;
+  object-position: center; 
   border-radius: 6px;
   margin-bottom: 12px;
-  display: block; /* Ensures proper rendering */
+  display: block; 
 }
 
 .remedy-card-title {
@@ -61,6 +61,265 @@
   }
 
   .remedy-card-image {
-    max-height: 250px; /* Adjusted for smaller screens */
+    max-height: 250px; 
+  }
+}
+ */
+
+
+/* .remedy-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.remedy-card:hover,
+.remedy-card:focus {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.remedy-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.remedy-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px;
+  text-align: center;
+  width: 100%;
+}
+
+.remedy-card-disease {
+  font-size: 1rem;
+  color: #555;
+  margin: 0 0 8px;
+  text-align: center;
+  width: 100%;
+}
+
+.remedy-card-desc {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.4;
+  text-align: center;
+  margin: 0;
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .remedy-card-image {
+    height: 180px;
+  }
+}
+
+@media (max-width: 900px) {
+  .remedy-card-image {
+    height: 160px;
+  }
+  
+  .remedy-card-title {
+    font-size: 1.1rem;
+  }
+  
+  .remedy-card-disease {
+    font-size: 0.9rem;
+  }
+  
+  .remedy-card-desc {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .remedy-card {
+    padding: 12px;
+  }
+
+  .remedy-card-image {
+    height: 150px;
+  }
+  
+  .remedy-card-title {
+    font-size: 1rem;
+  }
+  
+  .remedy-card-disease {
+    font-size: 0.85rem;
+  }
+  
+  .remedy-card-desc {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 450px) {
+  .remedy-card {
+    padding: 10px;
+  }
+
+  .remedy-card-image {
+    height: 140px;
+  }
+  
+  .remedy-card-title {
+    font-size: 0.95rem;
+  }
+  
+  .remedy-card-disease {
+    font-size: 0.8rem;
+  }
+  
+  .remedy-card-desc {
+    font-size: 0.7rem;
+  }
+} */
+
+
+
+.remedy-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 8px var(--shadow-default);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.remedy-card:hover,
+.remedy-card:focus {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px var(--shadow-hover);
+}
+
+.remedy-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.remedy-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--title-color);
+  margin: 0 0 8px;
+  text-align: center;
+  width: 100%;
+}
+
+.remedy-card-disease {
+  font-size: 1rem;
+  color: var(--disease-color);
+  margin: 0 0 8px;
+  text-align: center;
+  width: 100%;
+}
+
+.remedy-card-desc {
+  font-size: 0.9rem;
+  color: var(--desc-color);
+  line-height: 1.4;
+  text-align: center;
+  margin: 0;
+  width: 100%;
+}
+
+/* MEDIA QUERIES */
+@media (max-width: 1200px) {
+  .remedy-card-image {
+    height: 180px;
+  }
+}
+
+@media (max-width: 900px) {
+  .remedy-card-image {
+    height: 160px;
+  }
+
+  .remedy-card-title {
+    font-size: 1.1rem;
+  }
+
+  .remedy-card-disease {
+    font-size: 0.9rem;
+  }
+
+  .remedy-card-desc {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .remedy-card {
+    padding: 12px;
+  }
+
+  .remedy-card-image {
+    height: 150px;
+  }
+
+  .remedy-card-title {
+    font-size: 1rem;
+  }
+
+  .remedy-card-disease {
+    font-size: 0.85rem;
+  }
+
+  .remedy-card-desc {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 450px) {
+  .remedy-card {
+    padding: 10px;
+  }
+
+  .remedy-card-image {
+    height: 140px;
+  }
+
+  .remedy-card-title {
+    font-size: 0.95rem;
+  }
+
+  .remedy-card-disease {
+    font-size: 0.8rem;
+  }
+
+  .remedy-card-desc {
+    font-size: 0.7rem;
   }
 }
