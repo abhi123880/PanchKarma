@@ -138,6 +138,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
           },
         }
       );
