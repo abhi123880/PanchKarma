@@ -1,4 +1,4 @@
-.hero-section {
+/* .hero-section {
   position: relative;
   width: 100%;
   height: 400px;
@@ -79,55 +79,6 @@
   background-color: #530a8b;
 }
 
-/* .remedy-card {
-  border: 1px solid #eee;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  height: 250px;
-  position: relative;
-  justify-content: flex-end;
-  box-sizing: border-box;
-}
-
-.remedy-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-}
-
-.remedy-card-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-  border-bottom: 10px;
-}
-
-.remedy-card-content {
-  position: relative;
-  z-index: 2;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.remedy-card-title {
-  font-size: 1.2em;
-  margin-bottom: 5px;
-  color: inherit;
-}
- */
 .remedy-card {
   border: 1px solid #eee;
   border-radius: 8px;
@@ -135,7 +86,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   cursor: pointer;
-  display: block; /* Change from flex to block */
+  display: block; 
   height: auto;
   position: relative;
   box-sizing: border-box;
@@ -151,10 +102,10 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 200px; /* Uniform image height */
+  height: 200px;
   object-fit: cover;
   z-index: 1;
-  border: none; /* Removed all borders from the image */
+  border: none; 
   border-radius: 8px 8px 0 0;
 }
 
@@ -164,11 +115,11 @@
   padding: 15px;
   display: flex;
   flex-direction: column;
-  background-color: transparent; /* Removed background */
-  color: #333; /* Darkened text color */
+  background-color: transparent;
+  color: #333;
   width: 100%;
   box-sizing: border-box;
-  text-align: center; /* Center the text */
+  text-align: center; 
 }
 
 .remedy-card-title {
@@ -228,7 +179,140 @@
     width: 90%;
     max-width: 300px;
   }
+} */
+
+
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 400px; /* Adjust as needed */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
 }
+
+.hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.4); /* Dark overlay for text readability */
+  border-radius: 8px;
+}
+
+.hero-title {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: 1.2em;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Remedies Grid Container */
+.remedies-grid {
+  display: grid;
+  /* *** MODIFIED FOR EXACT 5 COLUMNS & NO HORIZONTAL PADDING *** */
+  grid-template-columns: repeat(5, 1fr); /* Exactly 5 columns, each taking equal fraction of space */
+  gap: 20px; /* Consistent gap between cards */
+  padding: 40px 0; /* Top/bottom padding 40px, NO left/right padding */
+  /* Remove max-width and auto margins if you want it to stretch edge-to-edge */
+  margin: 20px 0; /* Keep top/bottom margin, NO left/right margin */
+  box-sizing: border-box; /* Important for consistent sizing */
+  width: 100%;
+}
+
+/* No Remedies Found message */
+.no-remedies {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2em;
+  color: #666;
+}
+
+/* Scroll To Top Button Styles (if not already defined) */
+.scroll-to-top-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #6a0dad; /* Example color */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+  z-index: 999;
+}
+
+.scroll-to-top-button:hover {
+  background-color: #530a8b;
+}
+
+@media (max-width: 1200px) {
+  .remedies-grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns on slightly smaller screens */
+    padding: 30px 15px; /* Adjust horizontal padding */
+  }
+}
+
+@media (max-width: 900px) {
+  .remedies-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns on medium screens */
+    padding: 20px 15px; /* Adjust horizontal padding */
+    gap: 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  .remedies-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for larger phones in landscape */
+    padding: 15px 10px; /* Adjust horizontal padding */
+    gap: 10px;
+  }
+
+  .hero-section {
+    height: 300px;
+  }
+
+  .hero-title {
+    font-size: 2em;
+  }
+
+  .hero-subtitle {
+    font-size: 1em;
+  }
+}
+
+/* *** NEW MEDIA QUERY FOR SMALL MOBILE SCREENS (Single Column) *** */
+@media (max-width: 450px) { /* Adjust this breakpoint based on typical phone widths */
+  .remedies-grid {
+    grid-template-columns: repeat(1, 1fr); /* 1 column on small phones */
+    padding: 15px 15px; /* Add more horizontal padding for single column */
+    gap: 15px; /* Maintain gap between cards */
+  }
+}
+
 
 
 
