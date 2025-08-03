@@ -552,18 +552,19 @@ const Profile = ({ currentUser, setCurrentUser }) => {
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
   const fileRef = useRef(null);
-  const [file, setFile] = useState(undefined);
+  const [file, setFile] = useState(null);
   const navigate = useNavigate();
-
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
 
   const handleSignout = () => {
     signout();
     setCurrentUser(null);
+    localStorage.removeItem("user");
     navigate('/');
   };
 
+  // Initialize formData with currentUser data
   useEffect(() => {
     console.log("Profile.jsx useEffect currentUser:", currentUser);
     if (currentUser) {
@@ -574,30 +575,32 @@ const Profile = ({ currentUser, setCurrentUser }) => {
         avatar: currentUser.avatar || "",
         phone: currentUser.phone || "",
       });
-      console.log("Profile.jsx formData set to:", {
-        username: currentUser.username || "",
-        email: currentUser.email || "",
-        password: "",
-        avatar: currentUser.avatar || "",
-        phone: currentUser.phone || "",
-      });
+    } else {
+      setError("No user data available. Please sign in.");
+      navigate('/login');
     }
-  }, [currentUser]);
+  }, [currentUser, navigate]);
 
+  // Handle file selection and preview
   useEffect(() => {
     if (file) {
-      // Check file size (max 5MB)
+      // Validate file
       if (file.size > 5 * 1024 * 1024) {
         setFileUploadError(true);
         setFilePerc(0);
         setError("File size exceeds 5MB limit");
         return;
       }
-      
-      const reader = new FileReader();
-      reader.onloadstart = () => {
+      if (!file.type.startsWith('image/')) {
+        setFileUploadError(true);
         setFilePerc(0);
-      };
+        setError("Only image files are allowed");
+        return;
+      }
+
+      // Preview the image locally
+      const reader = new FileReader();
+      reader.onloadstart = () => setFilePerc(0);
       reader.onprogress = (e) => {
         if (e.lengthComputable) {
           setFilePerc(Math.round((e.loaded / e.total) * 100));
@@ -605,8 +608,9 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       };
       reader.onloadend = () => {
         setFormData((prev) => ({ ...prev, avatar: reader.result }));
-        setFileUploadError(false);
         setFilePerc(100);
+        setFileUploadError(false);
+        setMessage("Image selected. Submit to save changes.");
       };
       reader.onerror = () => {
         setFileUploadError(true);
@@ -617,10 +621,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   }, [file]);
 
-  if (!currentUser) {
-    return <p className="profile-no-user">No user data available</p>;
-  }
-
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -628,48 +628,71 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const Monograph = async (e) => {
     e.preventDefault();
-
     setMessage(null);
     setError(null);
 
     if (!currentUser || !currentUser.id) {
       setError("User ID is missing. Please sign in again.");
+      console.error("Missing currentUser or currentUser.id:", currentUser);
+      navigate('/login');
       return;
     }
 
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        setError("Authentication token is missing. Please sign in again.");
+        console.error("No token found in localStorage");
+        navigate('/login');
+        return;
+      }
+
+      const formDataToSend = new FormData();
+      formDataToSend.append('username', formData.username);
+      formDataToSend.append('email', formData.email);
+      if (formData.password) formDataToSend.append('password', formData.password);
+      formDataToSend.append('phone', formData.phone);
+      if (file) formDataToSend.append('avatar', file);
+
+      console.log("Submitting profile update with data:", {
+        username: formData.username,
+        email: formData.email,
+        phone: formData.phone,
+        hasFile: !!file,
+      });
+
       const response = await fetch(
         `https://panchkarma.onrender.com/api/user/update/${currentUser.id}`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${token}`,
           },
           credentials: "include",
-          body: JSON.stringify(formData),
+          body: formDataToSend,
         }
       );
 
       const data = await response.json();
+      console.log("Backend response:", data);
 
       if (!response.ok) {
-        setError(data.message || "Failed to update profile");
-      } else {
-        setMessage("Profile updated successfully!");
-        setFormData((prev) => ({ ...prev, password: "" }));
-
-        if (typeof setCurrentUser === "function") {
-          setCurrentUser(data.user);
-          // Update localStorage with the new user data
-          localStorage.setItem("user", JSON.stringify(data.user));
-        }
+        setError(data.message || `Failed to update profile (Status: ${response.status})`);
+        console.error("Profile update failed:", data);
+        return;
       }
-    } catch {
-      setError("An unexpected error occurred.");
+
+      setMessage("Profile updated successfully!");
+      setFormData((prev) => ({ ...prev, password: "", avatar: data.user.avatar || prev.avatar }));
+      setFile(null);
+      setFilePerc(0);
+      setCurrentUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
+    } catch (err) {
+      console.error("Profile update error:", err);
+      setError(`An unexpected error occurred: ${err.message}`);
     }
   };
 
@@ -679,40 +702,50 @@ const Profile = ({ currentUser, setCurrentUser }) => {
 
     if (!currentUser || !currentUser.id) {
       setError("User ID is missing. Please sign in again.");
+      console.error("Missing currentUser or currentUser.id:", currentUser);
       return;
     }
 
     if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
       return;
     }
+
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        setError("Authentication token is missing. Please sign in again.");
+        console.error("No token found in localStorage");
+        return;
+      }
+
+      console.log("Deleting account for user ID:", currentUser.id);
       const response = await fetch(
         `https://panchkarma.onrender.com/api/user/delete/${currentUser.id}`,
         {
           method: "DELETE",
           headers: {
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${token}`,
           },
           credentials: "include",
         }
       );
 
       const data = await response.json();
+      console.log("Delete account response:", data);
 
       if (!response.ok) {
-        alert(data.message || "Failed to delete account");
-        setError(data.message || "Failed to delete account");
-      } else {
-        alert("Account deleted successfully.");
-        setMessage("Account deleted successfully.");
-        if (typeof setCurrentUser === "function") {
-          setCurrentUser(null);
-        }
+        setError(data.message || `Failed to delete account (Status: ${response.status})`);
+        console.error("Account deletion failed:", data);
+        return;
       }
-    } catch {
-      alert("An unexpected error occurred.");
-      setError("An unexpected error occurred.");
+
+      setMessage("Account deleted successfully.");
+      setCurrentUser(null);
+      localStorage.removeItem("user");
+      navigate('/');
+    } catch (err) {
+      console.error("Delete account error:", err);
+      setError(`An unexpected error occurred: ${err.message}`);
     }
   };
 
@@ -720,7 +753,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     <div className="profile-container">
       <h1 className="profile-title">Your Profile</h1>
 
-      <form onSubmit={handleSubmit} className="profile-form">
+      <form onSubmit={Monograph} className="profile-form">
         <input
           type="file"
           accept="image/*"
@@ -733,17 +766,17 @@ const Profile = ({ currentUser, setCurrentUser }) => {
         <div className="profile-avatar-wrapper">
           <img
             onClick={() => fileRef.current.click()}
-            src={formData.avatar || currentUser.avatar || "/assets/avatar.png"}
+            src={formData.avatar || currentUser?.avatar || "/assets/avatar.png"}
             alt="profile"
             className="profile-avatar"
           />
           <p className="profile-avatar-status">
             {fileUploadError ? (
-              <span className="profile-error">Image upload failed (max 5MB)</span>
+              <span className="profile-error">Image selection failed</span>
             ) : filePerc > 0 && filePerc < 100 ? (
-              <span className="profile-uploading">Uploading {filePerc}%...</span>
+              <span className="profile-uploading">Processing {filePerc}%...</span>
             ) : filePerc === 100 ? (
-              <span className="profile-uploaded">Image uploaded!</span>
+              <span className="profile-uploaded">Image selected! Submit to save.</span>
             ) : null}
           </p>
         </div>
@@ -757,7 +790,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           className="profile-input"
           required
         />
-
         <input
           type="email"
           id="email"
@@ -783,25 +815,23 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           placeholder="New Password (optional)"
           className="profile-input"
         />
-        <button
-          type="submit"
-          className="profile-btn"
-        >
+        <button type="submit" className="profile-btn">
           Update Profile
         </button>
       </form>
       <div className="profile-actions">
-        <span className="profile-delete" onClick={handleDeleteAccount}>Delete account</span>
-        <span className="profile-signout" onClick={handleSignout}>Sign Out</span>
+        <span className="profile-delete" onClick={handleDeleteAccount}>
+          Delete account
+        </span>
+        <span className="profile-signout" onClick={handleSignout}>
+          Sign Out
+        </span>
       </div>
       {message && <p className="profile-message">{message}</p>}
       {error && <p className="profile-error">{error}</p>}
       <ScrollToTopButton />
-    </div>    
+    </div>
   );
 };
 
 export default Profile;
-
-
-this is my propfile.jsx code in this when image is successyfully upload and page refresh so image is remove explain me error and fix my code
