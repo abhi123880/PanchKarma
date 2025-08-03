@@ -627,6 +627,9 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       if (formData.password) formDataToSend.append("password", formData.password);
       if (file) formDataToSend.append("avatar", file);
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
       const response = await fetch(
         `https://panchkarma.onrender.com/api/user/update/${currentUser.id}`,
         {
@@ -636,8 +639,11 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           },
           credentials: "include",
           body: formDataToSend,
+          signal: controller.signal,
         }
       );
+
+      clearTimeout(timeoutId);
 
       const data = await response.json();
       if (!response.ok) {
@@ -656,7 +662,13 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       }
     } catch (err) {
       console.error("Error updating profile:", err);
-      setError("Failed to connect to the server. Please try again later.");
+      if (err.name === 'AbortError') {
+        setError("Request timed out. The server may be starting up or down. Please try again.");
+      } else if (err.message.includes('NetworkError') || err.message.includes('Failed to fetch')) {
+        setError("Failed to connect to the server. Please check your network or try again later.");
+      } else {
+        setError("An unexpected error occurred. Please try again later.");
+      }
     }
   };
 
@@ -681,6 +693,9 @@ const Profile = ({ currentUser, setCurrentUser }) => {
         return;
       }
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
       const response = await fetch(
         `https://panchkarma.onrender.com/api/user/delete/${currentUser.id}`,
         {
@@ -689,8 +704,11 @@ const Profile = ({ currentUser, setCurrentUser }) => {
             Authorization: `Bearer ${token}`,
           },
           credentials: "include",
+          signal: controller.signal,
         }
       );
+
+      clearTimeout(timeoutId);
 
       const data = await response.json();
       if (!response.ok) {
@@ -705,7 +723,13 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       navigate('/');
     } catch (err) {
       console.error("Error deleting account:", err);
-      setError("Failed to connect to the server. Please try again later.");
+      if (err.name === 'AbortError') {
+        setError("Request timed out. The server may be starting up or down. Please try again.");
+      } else if (err.message.includes('NetworkError') || err.message.includes('Failed to fetch')) {
+        setError("Failed to connect to the server. Please check your network or try again later.");
+      } else {
+        setError("An unexpected error occurred. Please try again later.");
+      }
     }
   };
 
