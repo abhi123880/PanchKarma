@@ -21,7 +21,9 @@ export default function RemedyCard({ remedy, onSelect }) {
         loading="lazy"
         className="remedy-card-image"
       />
-      <h3 className="remedy-card-title">{remedy.name}</h3>
+      <div className="remedy-card-content">
+        <h3 className="remedy-card-title">{remedy.name}</h3>
+      </div>
 
     </article>
   );
