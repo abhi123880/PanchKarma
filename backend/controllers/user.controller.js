@@ -1,3 +1,4 @@
+
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
 export const updateUser = async (req, res, next) => {
@@ -15,7 +16,17 @@ export const updateUser = async (req, res, next) => {
     if (updates.avatar) user.avatar = updates.avatar;
     if (updates.phone) user.phone = updates.phone;
     await user.save();
-    res.status(200).json({ success: true, message: "Profile updated", user });
+    res.status(200).json({ 
+      success: true, 
+      message: "Profile updated", 
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        avatar: user.avatar,
+      } 
+    });
   } catch (error) {
     next(errorHandler(500, error.message));
   }
