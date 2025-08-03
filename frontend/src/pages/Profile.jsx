@@ -257,282 +257,6 @@
 
 
 
-// import { useState, useEffect, useRef } from "react";
-// import { useNavigate } from 'react-router-dom';
-// import { useAuth } from '../context/AuthContext';
-// import ScrollToTopButton from "../components/ScrollToTopButton";
-// import '../styles/Profile.css';
-
-// const Profile = ({ currentUser, setCurrentUser }) => {
-//   const { signout } = useAuth();
-//   const [formData, setFormData] = useState({
-//     username: "",
-//     email: "",
-//     password: "",
-//     avatar: "",
-//     phone: "",
-//   });
-
-//   const [message, setMessage] = useState(null);
-//   const [error, setError] = useState(null);
-//   const fileRef = useRef(null);
-//   const [file, setFile] = useState(undefined);
-//   const navigate = useNavigate();
-
-//   const [filePerc, setFilePerc] = useState(0);
-//   const [fileUploadError, setFileUploadError] = useState(false);
-
-//   const handleSignout = () => {
-//     signout();
-//     setCurrentUser(null);
-//     navigate('/');
-//   };
-
-//   useEffect(() => {
-//     console.log("Profile.jsx useEffect currentUser:", currentUser);
-//     if (currentUser) {
-//       setFormData({
-//         username: currentUser.username || "",
-//         email: currentUser.email || "",
-//         password: "",
-//         avatar: currentUser.avatar || "",
-//         phone: currentUser.phone || "",
-//       });
-//       console.log("Profile.jsx formData set to:", {
-//         username: currentUser.username || "",
-//         email: currentUser.email || "",
-//         password: "",
-//         avatar: currentUser.avatar || "",
-//         phone: currentUser.phone || "",
-//       });
-//     }
-//   }, [currentUser]);
-
-//   useEffect(() => {
-//     if (file) {
-//       // Check file size (max 5MB)
-//       if (file.size > 5 * 1024 * 1024) {
-//         setFileUploadError(true);
-//         setFilePerc(0);
-//         setError("File size exceeds 5MB limit");
-//         return;
-//       }
-      
-//       const reader = new FileReader();
-//       reader.onloadstart = () => {
-//         setFilePerc(0);
-//       };
-//       reader.onprogress = (e) => {
-//         if (e.lengthComputable) {
-//           setFilePerc(Math.round((e.loaded / e.total) * 100));
-//         }
-//       };
-//       reader.onloadend = () => {
-//         setFormData((prev) => ({ ...prev, avatar: reader.result }));
-//         setFileUploadError(false);
-//         setFilePerc(100);
-//       };
-//       reader.onerror = () => {
-//         setFileUploadError(true);
-//         setFilePerc(0);
-//         setError("Failed to read file");
-//       };
-//       reader.readAsDataURL(file);
-//     }
-//   }, [file]);
-
-//   if (!currentUser) {
-//     return <p className="profile-no-user">No user data available</p>;
-//   }
-
-//   const handleChange = (e) => {
-//     setFormData((prev) => ({
-//       ...prev,
-//       [e.target.id]: e.target.value,
-//     }));
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     setMessage(null);
-//     setError(null);
-
-//     if (!currentUser || !currentUser.id) {
-//       setError("User ID is missing. Please sign in again.");
-//       return;
-//     }
-
-//     try {
-//       const token = localStorage.getItem('token');
-//       const response = await fetch(
-//         `https://panchkarma.onrender.com/api/user/update/${currentUser.id}`,
-//         {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//             "Authorization": `Bearer ${token}`
-//           },
-//           credentials: "include",
-//           body: JSON.stringify(formData),
-//         }
-//       );
-
-//       const data = await response.json();
-
-//       if (!response.ok) {
-//         setError(data.message || "Failed to update profile");
-//       } else {
-//         setMessage("Profile updated successfully!");
-//         setFormData((prev) => ({ ...prev, password: "" }));
-
-//         if (typeof setCurrentUser === "function") {
-//           setCurrentUser(data.user);
-//           // Update localStorage with the new user data
-//           localStorage.setItem("user", JSON.stringify(data.user));
-//         }
-//       }
-//     } catch {
-//       setError("An unexpected error occurred.");
-//     }
-//   };
-
-//   const handleDeleteAccount = async () => {
-//     setMessage(null);
-//     setError(null);
-
-//     if (!currentUser || !currentUser.id) {
-//       setError("User ID is missing. Please sign in again.");
-//       return;
-//     }
-
-//     if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-//       return;
-//     }
-//     try {
-//       const token = localStorage.getItem('token');
-//       const response = await fetch(
-//         `https://panchkarma.onrender.com/api/user/delete/${currentUser.id}`,
-//         {
-//           method: "DELETE",
-//           headers: {
-//             "Authorization": `Bearer ${token}`
-//           },
-//           credentials: "include",
-//         }
-//       );
-
-//       const data = await response.json();
-
-//       if (!response.ok) {
-//         alert(data.message || "Failed to delete account");
-//         setError(data.message || "Failed to delete account");
-//       } else {
-//         alert("Account deleted successfully.");
-//         setMessage("Account deleted successfully.");
-//         if (typeof setCurrentUser === "function") {
-//           setCurrentUser(null);
-//         }
-//       }
-//     } catch {
-//       alert("An unexpected error occurred.");
-//       setError("An unexpected error occurred.");
-//     }
-//   };
-
-//   return (
-//     <div className="profile-container">
-//       <h1 className="profile-title">Your Profile</h1>
-
-//       <form onSubmit={handleSubmit} className="profile-form">
-//         <input
-//           type="file"
-//           accept="image/*"
-//           ref={fileRef}
-//           onChange={(e) => setFile(e.target.files[0])}
-//           className="profile-file-input"
-//           hidden
-//         />
-
-//         <div className="profile-avatar-wrapper">
-//           <img
-//             onClick={() => fileRef.current.click()}
-//             src={formData.avatar || currentUser.avatar || "/assets/avatar.png"}
-//             alt="profile"
-//             className="profile-avatar"
-//           />
-//           <p className="profile-avatar-status">
-//             {fileUploadError ? (
-//               <span className="profile-error">Image upload failed (max 5MB)</span>
-//             ) : filePerc > 0 && filePerc < 100 ? (
-//               <span className="profile-uploading">Uploading {filePerc}%...</span>
-//             ) : filePerc === 100 ? (
-//               <span className="profile-uploaded">Image uploaded!</span>
-//             ) : null}
-//           </p>
-//         </div>
-
-//         <input
-//           type="text"
-//           id="username"
-//           value={formData.username}
-//           onChange={handleChange}
-//           placeholder="Username"
-//           className="profile-input"
-//           required
-//         />
-
-//         <input
-//           type="email"
-//           id="email"
-//           value={formData.email}
-//           onChange={handleChange}
-//           placeholder="Email"
-//           className="profile-input"
-//           required
-//         />
-//         <input
-//           type="tel"
-//           id="phone"
-//           value={formData.phone}
-//           onChange={handleChange}
-//           placeholder="Phone Number"
-//           className="profile-input"
-//         />
-//         <input
-//           type="password"
-//           id="password"
-//           value={formData.password}
-//           onChange={handleChange}
-//           placeholder="New Password (optional)"
-//           className="profile-input"
-//         />
-//         <button
-//           type="submit"
-//           className="profile-btn"
-//         >
-//           Update Profile
-//         </button>
-//       </form>
-//       <div className="profile-actions">
-//         <span className="profile-delete" onClick={handleDeleteAccount}>Delete account</span>
-//         <span className="profile-signout" onClick={handleSignout}>Sign Out</span>
-//       </div>
-//       {message && <p className="profile-message">{message}</p>}
-//       {error && <p className="profile-error">{error}</p>}
-//       <ScrollToTopButton />
-//     </div>    
-//   );
-// };
-
-// export default Profile;
-
-
-
-
-
-
-
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -552,56 +276,52 @@ const Profile = ({ currentUser, setCurrentUser }) => {
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
   const fileRef = useRef(null);
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState(undefined);
   const navigate = useNavigate();
+
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
 
   const handleSignout = () => {
     signout();
     setCurrentUser(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
     navigate('/');
   };
 
-  // Initialize formData with currentUser data
   useEffect(() => {
     console.log("Profile.jsx useEffect currentUser:", currentUser);
-    if (!currentUser || !currentUser.id) {
-      setError("No user data available. Please sign in.");
-      navigate('/login');
-      return;
+    if (currentUser) {
+      setFormData({
+        username: currentUser.username || "",
+        email: currentUser.email || "",
+        password: "",
+        avatar: currentUser.avatar || "",
+        phone: currentUser.phone || "",
+      });
+      console.log("Profile.jsx formData set to:", {
+        username: currentUser.username || "",
+        email: currentUser.email || "",
+        password: "",
+        avatar: currentUser.avatar || "",
+        phone: currentUser.phone || "",
+      });
     }
-    setFormData({
-      username: currentUser.username || "",
-      email: currentUser.email || "",
-      password: "",
-      avatar: currentUser.avatar || "",
-      phone: currentUser.phone || "",
-    });
-  }, [currentUser, navigate]);
+  }, [currentUser]);
 
-  // Handle file selection and preview
   useEffect(() => {
     if (file) {
-      // Validate file
+      // Check file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         setFileUploadError(true);
         setFilePerc(0);
         setError("File size exceeds 5MB limit");
         return;
       }
-      if (!file.type.startsWith('image/')) {
-        setFileUploadError(true);
-        setFilePerc(0);
-        setError("Only image files are allowed");
-        return;
-      }
-
-      // Preview the image locally
+      
       const reader = new FileReader();
-      reader.onloadstart = () => setFilePerc(0);
+      reader.onloadstart = () => {
+        setFilePerc(0);
+      };
       reader.onprogress = (e) => {
         if (e.lengthComputable) {
           setFilePerc(Math.round((e.loaded / e.total) * 100));
@@ -609,9 +329,8 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       };
       reader.onloadend = () => {
         setFormData((prev) => ({ ...prev, avatar: reader.result }));
-        setFilePerc(100);
         setFileUploadError(false);
-        setMessage("Image selected. Click 'Update Profile' to save.");
+        setFilePerc(100);
       };
       reader.onerror = () => {
         setFileUploadError(true);
@@ -622,6 +341,10 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   }, [file]);
 
+  if (!currentUser) {
+    return <p className="profile-no-user">No user data available</p>;
+  }
+
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -631,75 +354,46 @@ const Profile = ({ currentUser, setCurrentUser }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setMessage(null);
     setError(null);
 
     if (!currentUser || !currentUser.id) {
       setError("User ID is missing. Please sign in again.");
-      console.error("Missing currentUser or currentUser.id:", currentUser);
-      navigate('/login');
-      return;
-    }
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setError("Authentication token is missing. Please sign in again.");
-      console.error("No token found in localStorage");
-      navigate('/login');
       return;
     }
 
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('username', formData.username);
-      formDataToSend.append('email', formData.email);
-      if (formData.password) formDataToSend.append('password', formData.password);
-      formDataToSend.append('phone', formData.phone);
-      if (file) formDataToSend.append('avatar', file);
-
-      console.log("Submitting profile update with data:", {
-        username: formData.username,
-        email: formData.email,
-        phone: formData.phone,
-        hasFile: !!file,
-        userId: currentUser.id,
-        token: token.substring(0, 10) + "...", // Log partial token for security
-      });
-
+      const token = localStorage.getItem('token');
       const response = await fetch(
         `https://panchkarma.onrender.com/api/user/update/${currentUser.id}`,
         {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
           },
           credentials: "include",
-          body: formDataToSend,
+          body: JSON.stringify(formData),
         }
       );
 
       const data = await response.json();
-      console.log("Backend response:", { status: response.status, data });
 
       if (!response.ok) {
-        setError(data.message || `Failed to update profile (Status: ${response.status})`);
-        console.error("Profile update failed:", { status: response.status, data });
-        return;
-      }
+        setError(data.message || "Failed to update profile");
+      } else {
+        setMessage("Profile updated successfully!");
+        setFormData((prev) => ({ ...prev, password: "" }));
 
-      setMessage("Profile updated successfully!");
-      setFormData((prev) => ({ ...prev, password: "", avatar: data.user.avatar || prev.avatar }));
-      setFile(null);
-      setFilePerc(0);
-      setCurrentUser(data.user);
-      localStorage.setItem("user", JSON.stringify(data.user));
-    } catch (err) {
-      console.error("Fetch error:", err);
-      let errorMessage = "Failed to connect to the server. Please try again later.";
-      if (err.name === "TypeError" && err.message.includes("fetch")) {
-        errorMessage = "Network error: Unable to reach the server. Check your connection or server status.";
+        if (typeof setCurrentUser === "function") {
+          setCurrentUser(data.user);
+          // Update localStorage with the new user data
+          localStorage.setItem("user", JSON.stringify(data.user));
+        }
       }
-      setError(errorMessage);
+    } catch {
+      setError("An unexpected error occurred.");
     }
   };
 
@@ -709,57 +403,40 @@ const Profile = ({ currentUser, setCurrentUser }) => {
 
     if (!currentUser || !currentUser.id) {
       setError("User ID is missing. Please sign in again.");
-      console.error("Missing currentUser or currentUser.id:", currentUser);
-      navigate('/login');
       return;
     }
 
     if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
       return;
     }
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setError("Authentication token is missing. Please sign in again.");
-      console.error("No token found in localStorage");
-      navigate('/login');
-      return;
-    }
-
     try {
-      console.log("Deleting account for user ID:", currentUser.id);
+      const token = localStorage.getItem('token');
       const response = await fetch(
         `https://panchkarma.onrender.com/api/user/delete/${currentUser.id}`,
         {
           method: "DELETE",
           headers: {
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`
           },
           credentials: "include",
         }
       );
 
       const data = await response.json();
-      console.log("Delete account response:", { status: response.status, data });
 
       if (!response.ok) {
-        setError(data.message || `Failed to delete account (Status: ${response.status})`);
-        console.error("Account deletion failed:", { status: response.status, data });
-        return;
+        alert(data.message || "Failed to delete account");
+        setError(data.message || "Failed to delete account");
+      } else {
+        alert("Account deleted successfully.");
+        setMessage("Account deleted successfully.");
+        if (typeof setCurrentUser === "function") {
+          setCurrentUser(null);
+        }
       }
-
-      setMessage("Account deleted successfully.");
-      setCurrentUser(null);
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      navigate('/');
-    } catch (err) {
-      console.error("Fetch error:", err);
-      let errorMessage = "Failed to connect to the server. Please try again later.";
-      if (err.name === "TypeError" && err.message.includes("fetch")) {
-        errorMessage = "Network error: Unable to reach the server. Check your connection or server status.";
-      }
-      setError(errorMessage);
+    } catch {
+      alert("An unexpected error occurred.");
+      setError("An unexpected error occurred.");
     }
   };
 
@@ -780,17 +457,17 @@ const Profile = ({ currentUser, setCurrentUser }) => {
         <div className="profile-avatar-wrapper">
           <img
             onClick={() => fileRef.current.click()}
-            src={formData.avatar || currentUser?.avatar || "/assets/avatar.png"}
+            src={formData.avatar || currentUser.avatar || "/assets/avatar.png"}
             alt="profile"
             className="profile-avatar"
           />
           <p className="profile-avatar-status">
             {fileUploadError ? (
-              <span className="profile-error">Image selection failed</span>
+              <span className="profile-error">Image upload failed (max 5MB)</span>
             ) : filePerc > 0 && filePerc < 100 ? (
-              <span className="profile-uploading">Processing {filePerc}%...</span>
+              <span className="profile-uploading">Uploading {filePerc}%...</span>
             ) : filePerc === 100 ? (
-              <span className="profile-uploaded">Image selected! Submit to save.</span>
+              <span className="profile-uploaded">Image uploaded!</span>
             ) : null}
           </p>
         </div>
@@ -804,6 +481,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           className="profile-input"
           required
         />
+
         <input
           type="email"
           id="email"
@@ -829,23 +507,29 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           placeholder="New Password (optional)"
           className="profile-input"
         />
-        <button type="submit" className="profile-btn">
+        <button
+          type="submit"
+          className="profile-btn"
+        >
           Update Profile
         </button>
       </form>
       <div className="profile-actions">
-        <span className="profile-delete" onClick={handleDeleteAccount}>
-          Delete account
-        </span>
-        <span className="profile-signout" onClick={handleSignout}>
-          Sign Out
-        </span>
+        <span className="profile-delete" onClick={handleDeleteAccount}>Delete account</span>
+        <span className="profile-signout" onClick={handleSignout}>Sign Out</span>
       </div>
       {message && <p className="profile-message">{message}</p>}
       {error && <p className="profile-error">{error}</p>}
       <ScrollToTopButton />
-    </div>
+    </div>    
   );
 };
 
 export default Profile;
+
+
+
+
+
+
+
