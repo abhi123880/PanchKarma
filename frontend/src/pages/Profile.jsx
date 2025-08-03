@@ -546,33 +546,18 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     avatar: "",
     phone: "",
   });
-
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
   const fileRef = useRef(null);
-  const [file, setFile] = useState(undefined);
-  const navigate = useNavigate();
-
+  const [file, setFile] = useState(null);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSignout = () => {
-    signout();
-    setCurrentUser(null);
-    navigate('/');
-  };
-
+  // Initialize formData with currentUser data
   useEffect(() => {
-    console.log("Profile.jsx useEffect currentUser:", currentUser);
     if (currentUser) {
       setFormData({
-        username: currentUser.username || "",
-        email: currentUser.email || "",
-        password: "",
-        avatar: currentUser.avatar || "",
-        phone: currentUser.phone || "",
-      });
-      console.log("Profile.jsx formData set to:", {
         username: currentUser.username || "",
         email: currentUser.email || "",
         password: "",
@@ -582,8 +567,18 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }
   }, [currentUser]);
 
+  // Handle file selection and validation
   useEffect(() => {
     if (file) {
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        setFileUploadError(true);
+        setError("File size exceeds 5MB limit.");
+        setFile(null);
+        setFilePerc(0);
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData((prev) => ({ ...prev, avatar: reader.result }));
@@ -593,15 +588,13 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       reader.onerror = () => {
         setFileUploadError(true);
         setFilePerc(0);
+        setError("Failed to read the image file.");
       };
       reader.readAsDataURL(file);
     }
   }, [file]);
 
-  if (!currentUser) {
-    return <p className="profile-no-user">No user data available</p>;
-  }
-
+  // Handle input changes
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -609,9 +602,9 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setMessage(null);
     setError(null);
 
@@ -622,36 +615,52 @@ const Profile = ({ currentUser, setCurrentUser }) => {
 
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        setError("Authentication token is missing. Please sign in again.");
+        return;
+      }
+
+      const formDataToSend = new FormData();
+      formDataToSend.append("username", formData.username);
+      formDataToSend.append("email", formData.email);
+      formDataToSend.append("phone", formData.phone);
+      if (formData.password) formDataToSend.append("password", formData.password);
+      if (file) formDataToSend.append("avatar", file);
+
       const response = await fetch(
         `https://panchkarma.onrender.com/api/user/update/${currentUser.id}`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
-          body: JSON.stringify(formData),
+          body: formDataToSend,
         }
       );
 
       const data = await response.json();
-
       if (!response.ok) {
-        setError(data.message || "Failed to update profile");
-      } else {
-        setMessage("Profile updated successfully!");
-        setFormData((prev) => ({ ...prev, password: "" }));
-
-        if (typeof setCurrentUser === "function") {
-          setCurrentUser(data.user);
-        }
+        setError(data.message || `HTTP error ${response.status}`);
+        return;
       }
-    } catch {
-      setError("An unexpected error occurred.");
+      if (!data.user) {
+        setError("Unexpected response format from server.");
+        return;
+      }
+
+      setMessage("Profile updated successfully!");
+      setFormData((prev) => ({ ...prev, password: "" }));
+      if (typeof setCurrentUser === "function") {
+        setCurrentUser(data.user);
+      }
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      setError("Failed to connect to the server. Please try again later.");
     }
   };
 
+  // Handle account deletion
   const handleDeleteAccount = async () => {
     setMessage(null);
     setError(null);
@@ -664,36 +673,55 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
       return;
     }
+
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        setError("Authentication token is missing. Please sign in again.");
+        return;
+      }
+
       const response = await fetch(
-        `https://panchkarma.onrender.com0/api/user/delete/${currentUser.id}`,
+        `https://panchkarma.onrender.com/api/user/delete/${currentUser.id}`,
         {
           method: "DELETE",
           headers: {
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
         }
       );
 
       const data = await response.json();
-
       if (!response.ok) {
-        alert(data.message || "Failed to delete account");
-        setError(data.message || "Failed to delete account");
-      } else {
-        alert("Account deleted successfully.");
-        setMessage("Account deleted successfully.");
-        if (typeof setCurrentUser === "function") {
-          setCurrentUser(null);
-        }
+        setError(data.message || `HTTP error ${response.status}`);
+        return;
       }
-    } catch {
-      alert("An unexpected error occurred.");
-      setError("An unexpected error occurred.");
+
+      setMessage("Account deleted successfully.");
+      if (typeof setCurrentUser === "function") {
+        setCurrentUser(null);
+      }
+      navigate('/');
+    } catch (err) {
+      console.error("Error deleting account:", err);
+      setError("Failed to connect to the server. Please try again later.");
     }
   };
+
+  // Handle signout
+  const handleSignout = () => {
+    setMessage(null);
+    setError(null);
+    signout();
+    setCurrentUser(null);
+    navigate('/');
+  };
+
+  // Render loading state if no user data
+  if (!currentUser) {
+    return <p className="profile-no-user">No user data available</p>;
+  }
 
   return (
     <div className="profile-container">
@@ -736,7 +764,6 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           className="profile-input"
           required
         />
-
         <input
           type="email"
           id="email"
@@ -762,24 +789,25 @@ const Profile = ({ currentUser, setCurrentUser }) => {
           placeholder="New Password (optional)"
           className="profile-input"
         />
-        <button
-          type="submit"
-          className="profile-btn"
-        >
+        <button type="submit" className="profile-btn">
           Update Profile
         </button>
       </form>
+
       <div className="profile-actions">
-        <span className="profile-delete" onClick={handleDeleteAccount}>Delete account</span>
-        <span className="profile-signout" onClick={handleSignout}>Sign Out</span>
+        <span className="profile-delete" onClick={handleDeleteAccount}>
+          Delete account
+        </span>
+        <span className="profile-signout" onClick={handleSignout}>
+          Sign Out
+        </span>
       </div>
+
       {message && <p className="profile-message">{message}</p>}
       {error && <p className="profile-error">{error}</p>}
       <ScrollToTopButton />
-    </div>    
+    </div>
   );
 };
 
 export default Profile;
-
-
