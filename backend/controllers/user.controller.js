@@ -1,47 +1,40 @@
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
-
 export const updateUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
     const updates = req.body;
-
-    // Check if the user making the request is the same as the user being updated
     if (req.user.id !== userId) {
-      return next(errorHandler(403, "Forbidden: You can only update your own profile"));
+      return next(errorHandler(403, "Forbidden: cannot update another user's profile"));
     }
-
-    // Create an object to hold the fields we want to update
-    const updatedFields = {};
-
-    // Check for fields to update
-    if (updates.username) updatedFields.username = updates.username;
-    if (updates.email) updatedFields.email = updates.email;
-    if (updates.phone) updatedFields.phone = updates.phone;
-
-    // Optionally update the password if provided, no hashing applied
-    if (updates.password) {
-      updatedFields.password = updates.password; // Keep raw password as per your requirement
-    }
-
-    // Find the user and update the fields using `findByIdAndUpdate`
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { $set: updatedFields }, // Update only the fields provided
-      { new: true } // Return the updated document
-    );
-
-    if (!updatedUser) {
-      return next(errorHandler(404, "User not found"));
-    }
-
-    // Respond with the updated user data
-    return res.status(200).json({ message: "User updated successfully", user: updatedUser });
-  
+    const user = await User.findById(userId);
+    if (!user) return next(errorHandler(404, "User not found"));
+    if (updates.username) user.username = updates.username;
+    if (updates.email) user.email = updates.email;
+    if (updates.password) user.password = updates.password;
+    if (updates.avatar) user.avatar = updates.avatar;
+    if (updates.phone) user.phone = updates.phone;
+    await user.save();
+    res.status(200).json({ success: true, message: "Profile updated", user });
   } catch (error) {
-    return next(errorHandler(500, error.message));
+    next(errorHandler(500, error.message));
   }
 };
+export const deleteUser = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    if (req.user.id !== userId) {
+      return next(errorHandler(403, "Forbidden: cannot delete another user's account"));
+    }
+    const user = await User.findById(userId);
+    if (!user) return next(errorHandler(404, "User not found"));
+    await User.findByIdAndDelete(userId);
+    res.status(200).json({ success: true, message: "Account deleted successfully" });
+  } catch (error) {
+    next(errorHandler(500, error.message));
+  }
+};
+
 
 // import User from "../models/user.model.js";
 // import { errorHandler } from "../utils/error.js";
