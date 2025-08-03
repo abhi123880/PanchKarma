@@ -59,13 +59,13 @@
 }
 @media (max-width: 1200px) {
   .remedy-card-image {
-    height: 2000px;
+    height: 250px;
   }
 }
 
 @media (max-width: 900px) {
   .remedy-card-image {
-    height: 200px;
+    height: 250px;
   }
 
   .remedy-card-title {
@@ -109,7 +109,7 @@
   }
 
   .remedy-card-image {
-    height: 200px;
+    height: 275px;
   }
 
   .remedy-card-title {
