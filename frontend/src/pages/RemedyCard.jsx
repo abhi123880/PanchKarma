@@ -23,11 +23,6 @@ export default function RemedyCard({ remedy, onSelect }) {
       />
       <h3 className="remedy-card-title">{remedy.name}</h3>
 
-      <p className="remedy-card-disease">
-        <strong>Disease:</strong> {remedy.disease}
-      </p>
-
-      <p className="remedy-card-desc">{remedy.description}</p>
     </article>
   );
 }
