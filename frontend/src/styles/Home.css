@@ -79,17 +79,18 @@
   background-color: #530a8b;
 }
 
+/* ✅ UPDATED remedy-card section */
 .remedy-card {
   border: 1px solid #eee;
   border-radius: 8px;
-  overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   cursor: pointer;
   display: flex;
-  flex-direction: column; /* Stack image and content vertically */
-  height: 100%; /* Allow height to adjust based on content */
-  box-sizing: border-box;
+  flex-direction: column;
+  overflow: hidden;
+  height: auto;
+  background-color: white;
 }
 
 .remedy-card:hover {
@@ -99,32 +100,28 @@
 
 .remedy-card-image {
   width: 100%;
-  height: 200px; /* Fixed height for consistency */
+  height: 200px;
   object-fit: cover;
-  border-bottom: none; /* Ensure no border below the image */
-}
-
-.remedy-card-content {
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1; /* Allows content to take up remaining space */
-  background-color: transparent; /* Remove background overlay */
-  color: #333; /* Revert text color for readability on light background */
-  width: auto; /* Allow width to be determined by flex container */
+  border-bottom: 1px solid #ddd;
 }
 
 .remedy-card-title {
   font-size: 1.2em;
-  margin-bottom: 5px;
-  color: #333; /* Ensure title color is visible */
+  margin: 10px;
+  color: #333;
+  text-align: center;
+}
+
+/* Removed unused .remedy-card-content and .remedy-card-disease */
+.remedy-card-content {
+  display: none;
 }
 
 .remedy-card-disease {
-  font-size: 0.9em;
-  color: #666; /* Ensure subtitle color is visible */
+  display: none;
 }
 
+/* Responsive adjustments */
 @media (max-width: 1200px) {
   .remedies-grid {
     grid-template-columns: repeat(4, 1fr);
