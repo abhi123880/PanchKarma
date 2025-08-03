@@ -79,7 +79,7 @@
   background-color: #530a8b;
 }
 
-.remedy-card {
+/* .remedy-card {
   border: 1px solid #eee;
   border-radius: 8px;
   overflow: hidden;
@@ -127,11 +127,51 @@
   margin-bottom: 5px;
   color: inherit;
 }
-
-.remedy-card-disease {
-  font-size: 0.9em;
-  color: #ccc;
+ */
+.remedy-card {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  display: block; 
+  height: auto;
+  position: relative;
+  box-sizing: border-box;
 }
+
+.remedy-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.remedy-card-image {
+  position: static; 
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+
+.remedy-card-content {
+  position: static;
+  padding: 15px;
+  display: block;
+  background-color: transparent;
+  color: #333;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.remedy-card-title {
+  font-size: 1.2em;
+  margin-top: 5px;
+  margin-bottom: 0;
+  color: inherit;
+}
+
 
 @media (max-width: 1200px) {
   .remedies-grid {
