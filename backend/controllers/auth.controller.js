@@ -1,3 +1,4 @@
+
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
@@ -36,8 +37,6 @@ export const signup = async (req, res, next) => {
 
     const newUser = new User({ username, email, password, phone });
     await newUser.save();
-
-    // Set token expiration based on rememberMe
     const tokenExpiry = rememberMe ? "7d" : "1d";
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
@@ -61,6 +60,7 @@ export const signup = async (req, res, next) => {
         username: newUser.username,
         email: newUser.email,
         phone: newUser.phone,
+        avatar: newUser.avatar,
       },
     });
   } catch (error) {
@@ -110,6 +110,7 @@ export const signin = async (req, res, next) => {
         username: user.username,
         email: user.email,
         phone: user.phone,
+        avatar: user.avatar,
       },
     });
   } catch (error) {
