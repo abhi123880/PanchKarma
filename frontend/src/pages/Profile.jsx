@@ -561,24 +561,25 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     signout();
     setCurrentUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     navigate('/');
   };
 
   // Initialize formData with currentUser data
   useEffect(() => {
     console.log("Profile.jsx useEffect currentUser:", currentUser);
-    if (currentUser) {
-      setFormData({
-        username: currentUser.username || "",
-        email: currentUser.email || "",
-        password: "",
-        avatar: currentUser.avatar || "",
-        phone: currentUser.phone || "",
-      });
-    } else {
+    if (!currentUser || !currentUser.id) {
       setError("No user data available. Please sign in.");
       navigate('/login');
+      return;
     }
+    setFormData({
+      username: currentUser.username || "",
+      email: currentUser.email || "",
+      password: "",
+      avatar: currentUser.avatar || "",
+      phone: currentUser.phone || "",
+    });
   }, [currentUser, navigate]);
 
   // Handle file selection and preview
@@ -610,7 +611,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
         setFormData((prev) => ({ ...prev, avatar: reader.result }));
         setFilePerc(100);
         setFileUploadError(false);
-        setMessage("Image selected. Submit to save changes.");
+        setMessage("Image selected. Click 'Update Profile' to save.");
       };
       reader.onerror = () => {
         setFileUploadError(true);
@@ -628,7 +629,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     }));
   };
 
-  const Monograph = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage(null);
     setError(null);
@@ -640,15 +641,15 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       return;
     }
 
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setError("Authentication token is missing. Please sign in again.");
-        console.error("No token found in localStorage");
-        navigate('/login');
-        return;
-      }
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError("Authentication token is missing. Please sign in again.");
+      console.error("No token found in localStorage");
+      navigate('/login');
+      return;
+    }
 
+    try {
       const formDataToSend = new FormData();
       formDataToSend.append('username', formData.username);
       formDataToSend.append('email', formData.email);
@@ -661,6 +662,8 @@ const Profile = ({ currentUser, setCurrentUser }) => {
         email: formData.email,
         phone: formData.phone,
         hasFile: !!file,
+        userId: currentUser.id,
+        token: token.substring(0, 10) + "...", // Log partial token for security
       });
 
       const response = await fetch(
@@ -676,11 +679,11 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       );
 
       const data = await response.json();
-      console.log("Backend response:", data);
+      console.log("Backend response:", { status: response.status, data });
 
       if (!response.ok) {
         setError(data.message || `Failed to update profile (Status: ${response.status})`);
-        console.error("Profile update failed:", data);
+        console.error("Profile update failed:", { status: response.status, data });
         return;
       }
 
@@ -691,8 +694,12 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       setCurrentUser(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
     } catch (err) {
-      console.error("Profile update error:", err);
-      setError(`An unexpected error occurred: ${err.message}`);
+      console.error("Fetch error:", err);
+      let errorMessage = "Failed to connect to the server. Please try again later.";
+      if (err.name === "TypeError" && err.message.includes("fetch")) {
+        errorMessage = "Network error: Unable to reach the server. Check your connection or server status.";
+      }
+      setError(errorMessage);
     }
   };
 
@@ -703,6 +710,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     if (!currentUser || !currentUser.id) {
       setError("User ID is missing. Please sign in again.");
       console.error("Missing currentUser or currentUser.id:", currentUser);
+      navigate('/login');
       return;
     }
 
@@ -710,14 +718,15 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       return;
     }
 
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setError("Authentication token is missing. Please sign in again.");
-        console.error("No token found in localStorage");
-        return;
-      }
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError("Authentication token is missing. Please sign in again.");
+      console.error("No token found in localStorage");
+      navigate('/login');
+      return;
+    }
 
+    try {
       console.log("Deleting account for user ID:", currentUser.id);
       const response = await fetch(
         `https://panchkarma.onrender.com/api/user/delete/${currentUser.id}`,
@@ -731,21 +740,26 @@ const Profile = ({ currentUser, setCurrentUser }) => {
       );
 
       const data = await response.json();
-      console.log("Delete account response:", data);
+      console.log("Delete account response:", { status: response.status, data });
 
       if (!response.ok) {
         setError(data.message || `Failed to delete account (Status: ${response.status})`);
-        console.error("Account deletion failed:", data);
+        console.error("Account deletion failed:", { status: response.status, data });
         return;
       }
 
       setMessage("Account deleted successfully.");
       setCurrentUser(null);
       localStorage.removeItem("user");
+      localStorage.removeItem("token");
       navigate('/');
     } catch (err) {
-      console.error("Delete account error:", err);
-      setError(`An unexpected error occurred: ${err.message}`);
+      console.error("Fetch error:", err);
+      let errorMessage = "Failed to connect to the server. Please try again later.";
+      if (err.name === "TypeError" && err.message.includes("fetch")) {
+        errorMessage = "Network error: Unable to reach the server. Check your connection or server status.";
+      }
+      setError(errorMessage);
     }
   };
 
@@ -753,7 +767,7 @@ const Profile = ({ currentUser, setCurrentUser }) => {
     <div className="profile-container">
       <h1 className="profile-title">Your Profile</h1>
 
-      <form onSubmit={Monograph} className="profile-form">
+      <form onSubmit={handleSubmit} className="profile-form">
         <input
           type="file"
           accept="image/*"
