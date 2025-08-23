@@ -34,8 +34,6 @@ const SignUp = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
-    // Validate phone number format: 10 to 15 digits, optional leading +
     const phonePattern = /^\+?\d{10,15}$/;
     if (!phonePattern.test(formData.phone)) {
       setError("Phone number should be 10 to 15 digits, optionally starting with +");
@@ -49,6 +47,13 @@ const SignUp = () => {
       return;
     }
 
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$/;
+    if (!emailPattern.test(formData.email)) {
+      setError("Email must be a valid Gmail or Yahoo email address.");
+      setLoading(false);
+      return;
+    }
+    
     try {
       const { ...submitData } = formData; // exclude confirmPassword from submission
       const res = await fetch('https://panchkarma.onrender.com/api/auth/signup', {
