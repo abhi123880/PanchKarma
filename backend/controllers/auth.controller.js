@@ -29,6 +29,11 @@ export const signup = async (req, res, next) => {
     return next(errorHandler(400, "Passwords do not match"));
   }
 
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$/;
+  if (!emailPattern.test(email)) {
+    return next(errorHandler(400, "Email must be a valid Gmail or Yahoo email address."));
+  }
+
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
